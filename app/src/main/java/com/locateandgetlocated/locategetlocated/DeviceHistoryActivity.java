@@ -20,11 +20,12 @@ public class DeviceHistoryActivity extends AppCompatActivity {
         setTitle("Samsung");
         TextView temp = (TextView) findViewById(R.id.textView);
         final Bundle data = new Bundle();
-        data.putDouble("dlugosc", 56.1);
-        data.putDouble("szerokosc", 12.5);
+
+        data.putDouble("dlugosc",17.052048 );
+        data.putDouble("szerokosc", 51.101741 );
         data.putString("nazwa", "Samsung");
-        data.putString("data", "21.03.2016");
-        data.putString("godzina", "20:21");
+        data.putString("data", "15.03.2016");
+        data.putString("godzina", "21:25");
         temp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

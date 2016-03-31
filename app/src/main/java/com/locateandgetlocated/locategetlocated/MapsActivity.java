@@ -20,6 +20,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Double longitude=0.;
     private String date="Brak danych";
     private String device_name="Brak danych";
+    private String hour="Brak danych";
 
     private GoogleMap mMap;
     private CameraPosition cameraPosition;
@@ -39,17 +40,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-
-        /*Bundle pos = getIntent().getExtras();
+        Bundle pos = getIntent().getExtras();
         if(!pos.isEmpty()){
-            latitude = Double.parseDouble(pos.getString("szerokosc"));
-            longitude = Double.parseDouble(pos.getString("dlugosc"));
+            latitude = pos.getDouble("szerokosc");
+            longitude = pos.getDouble("dlugosc");
             date = pos.getString("data");
-            device_name = pos.getString("nazwa");}*/
+            device_name = pos.getString("nazwa");
+            hour = pos.getString("godzina");}
 
         LatLng place = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(place).title(device_name).snippet(date));
+        mMap.addMarker(new MarkerOptions().position(place).title(device_name).snippet(hour + " " + date));
         mMap.getUiSettings().setZoomControlsEnabled(true);
 
 
