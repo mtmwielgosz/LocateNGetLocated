@@ -19,10 +19,17 @@ public class DeviceHistoryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         setTitle("Samsung");
         TextView temp = (TextView) findViewById(R.id.textView);
+        final Bundle data = new Bundle();
+        data.putDouble("dlugosc", 56.1);
+        data.putDouble("szerokosc", 12.5);
+        data.putString("nazwa", "Samsung");
+        data.putString("data", "21.03.2016");
+        data.putString("godzina", "20:21");
         temp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                intent.putExtras(data);
                 startActivity(intent);
             }
         });
