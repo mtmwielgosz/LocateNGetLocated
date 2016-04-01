@@ -26,6 +26,13 @@ public class DevicesActivity extends AppCompatActivity
     private ViewPager viewPager;
 
     @Override
+    protected void onStart() { //Zmiana wybranej pozycji w menu głównym
+        super.onStart();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.nav_devices);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_devices);
@@ -52,7 +59,6 @@ public class DevicesActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        setTitle("Urządzenia");
         TextView temp = (TextView) findViewById(R.id.textView);
         temp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,9 +122,11 @@ public class DevicesActivity extends AppCompatActivity
             intent = new Intent(this, DevicesActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_settings) {
-
+            intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_about) {
-
+            intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

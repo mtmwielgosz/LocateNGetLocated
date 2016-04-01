@@ -1,13 +1,16 @@
 <resources>
-    <string name="app_name">Locate&amp;GetLocated</string>
+    <string name="app_name">Locate &amp; Get Located</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="title_activity_history">HistoryActivity</string>
-    <string name="title_activity_devices">DevicesActivity</string>
+    <string name="title_activity_localization">Lokalizacja</string>
+    <string name="title_activity_history">Historia</string>
+    <string name="title_activity_devices">Urządzenia</string>
     <string name="title_activity_device">DeviceActivity</string>
     <string name="title_activity_device_history">DeviceHistoryActivity</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="title_activity_settings">Ustawienia</string>
+    <string name="title_activity_about">O aplikacji</string>
 </resources>

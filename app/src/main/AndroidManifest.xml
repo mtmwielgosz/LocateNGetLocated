@@ -9,7 +9,6 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -62,7 +61,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value= "AIzaSyCz75SJU3dPRYoBAIXaAns4KuKJfn0LOuw" />
+            android:value="AIzaSyCz75SJU3dPRYoBAIXaAns4KuKJfn0LOuw" />
 
         <activity
             android:name=".MapsActivity"
@@ -71,6 +70,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.locateandgetlocated.locategetlocated.DeviceHistoryActivity" />
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
