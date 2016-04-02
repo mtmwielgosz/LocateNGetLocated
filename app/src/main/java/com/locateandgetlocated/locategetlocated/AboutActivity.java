@@ -21,7 +21,7 @@ public class AboutActivity extends AppCompatActivity
     protected void onStart() { //Zmiana wybranej pozycji w menu głównym
         super.onStart();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.nav_about);
+      //  navigationView.setCheckedItem(R.id.nav_about);
     }
 
     @Override
