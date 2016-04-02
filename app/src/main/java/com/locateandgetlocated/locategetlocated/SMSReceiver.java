@@ -23,6 +23,16 @@ public class SMSReceiver extends BroadcastReceiver {
             msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
             message = msgs[i].getMessageBody() + " ZPI";
 
+            LocationTracker locationTracker = new LocationTracker(context);
+            if (locationTracker.canGetLocation()) {
+                double latitude = locationTracker.getLatitude();
+                double longitude = locationTracker.getLongitude();
+                Toast.makeText(context, "lat: " + latitude + "; long: " + longitude, Toast.LENGTH_LONG).show();
+            } else {
+                locationTracker.showSettingsAlert();
+                Toast.makeText(context, "tekst2", Toast.LENGTH_LONG).show();
+            }
+
             // wiadomosc message moze byc obsluzona
             Toast.makeText(context, message, Toast.LENGTH_LONG).show();
         }
