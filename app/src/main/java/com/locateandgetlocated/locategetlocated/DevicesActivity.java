@@ -29,7 +29,7 @@ public class DevicesActivity extends AppCompatActivity
     protected void onStart() { //Zmiana wybranej pozycji w menu głównym
         super.onStart();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-      //  navigationView.setCheckedItem(R.id.nav_devices);
+        navigationView.getMenu().getItem(2).setChecked(true);
     }
 
     @Override

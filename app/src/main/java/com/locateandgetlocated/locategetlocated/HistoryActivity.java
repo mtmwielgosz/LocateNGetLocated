@@ -22,7 +22,7 @@ public class HistoryActivity extends AppCompatActivity
     protected void onStart() { //Zmiana wybranej pozycji w menu głównym
         super.onStart();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-     //   navigationView.setCheckedItem(R.id.nav_history);
+        navigationView.getMenu().getItem(1).setChecked(true);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
