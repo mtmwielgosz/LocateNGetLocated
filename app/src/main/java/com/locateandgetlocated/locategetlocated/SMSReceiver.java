@@ -21,20 +21,32 @@ public class SMSReceiver extends BroadcastReceiver {
         msgs = new SmsMessage[pdus.length];
         for (int i = 0; i < msgs.length; i++) {
             msgs[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
-            message = msgs[i].getMessageBody() + " ZPI";
+            message = msgs[i].getMessageBody();
 
-            LocationTracker locationTracker = new LocationTracker(context);
-            if (locationTracker.canGetLocation()) {
-                double latitude = locationTracker.getLatitude();
-                double longitude = locationTracker.getLongitude();
-                Toast.makeText(context, "lat: " + latitude + "; long: " + longitude, Toast.LENGTH_LONG).show();
-            } else {
-                locationTracker.showSettingsAlert();
-                Toast.makeText(context, "tekst2", Toast.LENGTH_LONG).show();
+
+            String HOST_PREFIX = "#h#";
+            String CLIENT_PREFIX = "#c#";
+
+            if (message.startsWith(HOST_PREFIX)) {
+                Toast.makeText(context, "zapytanie od numeru: " + msgs[i].getOriginatingAddress(), Toast.LENGTH_LONG).show();
+                LocationTracker locationTracker = new LocationTracker(context);
+                if (locationTracker.canGetLocation()) {
+                    double latitude = locationTracker.getLatitude();
+                    double longitude = locationTracker.getLongitude();
+
+                    SMSSender smsSender = new SMSSender();
+                    smsSender.sendRequest(msgs[i].getOriginatingAddress(), CLIENT_PREFIX + latitude + "#" + longitude);
+                } else {
+                    locationTracker.showSettingsAlert();
+                }
             }
 
-            // wiadomosc message moze byc obsluzona
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+
+            if (message.startsWith(CLIENT_PREFIX)) {
+                String latitude = message.split("#")[2];
+                String longitude = message.split("#")[3];
+                Toast.makeText(context, "wyswietlanie na mapie, dodanie do bazy, otrzymane wspolrzedne: " + latitude + "; " + longitude, Toast.LENGTH_LONG).show();
+            }
         }
     }
 }
