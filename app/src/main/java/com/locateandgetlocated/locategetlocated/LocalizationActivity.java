@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LocalizationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,12 +44,16 @@ public class LocalizationActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Button localize = (Button) findViewById(R.id.button);
-        EditText phoneNr = (EditText) findViewById(R.id.editText);
-        final String intPhoneNr = phoneNr.getText().toString();
+        final EditText phoneNr = (EditText) findViewById(R.id.editText);
+      //  final String intPhoneNr = phoneNr.getText().toString();
         final SMSSender send = new SMSSender();
         localize.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String intPhoneNr = phoneNr.getText().toString();
+
+                Toast.makeText(getApplicationContext(), intPhoneNr + " ", Toast.LENGTH_LONG).show();
                 send.sendRequest(intPhoneNr, "#h#");
             }
         });
