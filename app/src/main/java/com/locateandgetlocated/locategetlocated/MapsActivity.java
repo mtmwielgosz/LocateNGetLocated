@@ -90,6 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
 
+        button_DeviceLocation.setText(device_name);
         cameraPosition = new CameraPosition.Builder()
                 .target(place)      // Sets the center of the map to Mountain View
                 .zoom(13)                   // Sets the zoom
