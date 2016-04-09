@@ -15,4 +15,5 @@ public class SMSSender {
         smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(receiver, null, message, null, null);
     }
+
 }

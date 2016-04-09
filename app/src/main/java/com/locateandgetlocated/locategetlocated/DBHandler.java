@@ -14,6 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.Date;
 
 /**
  * Created by Kamil on 2016-04-07.
@@ -44,19 +45,20 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public DBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, boolean external) {
         super(context, Environment.getExternalStorageDirectory() + File.separator + FILE_DIR + File.separator + DATABASE_NAME, factory, DATABASE_VERSION);
+
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String query = "CREATE TABLE " + TABLE_NAME + " ("
-                + REQUEST_ID + " INTGER PRIMARY KEY AUTOINCREMENT, "
-                + SENDER + " VARCHAR(255), "
-                + RECEIVER + " VARCHAR(255), "
-                + REQUEST_SEND_DATE + " VARCHAR(255), "
-                + REQUEST_RECEIVE_DATE + " VARCHAR(255), "
-                + REQUEST_LOCALIZATION_DATE + " VARCHAR(255), "
-                + LATITUDE + " VARCHAR(255), "
-                + LONGITUDE + " VARCHAR(255)"
+                + REQUEST_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + SENDER + " TEXT, "
+                + RECEIVER + " TEXT, "
+                + REQUEST_SEND_DATE + " INTEGER, "
+                + REQUEST_RECEIVE_DATE + " INTEGER, "
+                + REQUEST_LOCALIZATION_DATE + " INTEGER, "
+                + LATITUDE + " TEXT, "
+                + LONGITUDE + " TEXT"
                 + ");";
         sqLiteDatabase.execSQL(query);
     }
@@ -70,9 +72,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void addRequest(Request request) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(REQUEST_SEND_DATE, String.valueOf(request.getSendDate()));
-        contentValues.put(REQUEST_RECEIVE_DATE, String.valueOf(request.getReceiveDate()));
-        contentValues.put(REQUEST_LOCALIZATION_DATE, String.valueOf(request.getLocalizationDate()));
+        contentValues.put(REQUEST_SEND_DATE, request.getSendDate().getTime());
+        // contentValues.put(REQUEST_RECEIVE_DATE, request.getReceiveDate().getTime());
+        //  contentValues.put(REQUEST_LOCALIZATION_DATE, request.getLocalizationDate().getTime());
         contentValues.put(LATITUDE, String.valueOf(request.getLatitude()));
         contentValues.put(LONGITUDE, String.valueOf(request.getLongitude()));
 
@@ -99,23 +101,19 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-hh-mm");
-
-            Request request = new Request(cursor.getInt(cursor.getColumnIndex(REQUEST_ID)),
+            Request request = new Request(
+                    cursor.getInt(cursor.getColumnIndex(REQUEST_ID)),
+                    cursor.getDouble(cursor.getColumnIndex(LATITUDE)),
+                    cursor.getDouble(cursor.getColumnIndex(LONGITUDE)),
+                    new Date(cursor.getLong(cursor.getColumnIndex(REQUEST_SEND_DATE))),
+                    new Date(cursor.getLong(cursor.getColumnIndex(REQUEST_RECEIVE_DATE))),
+                    new Date(cursor.getLong(cursor.getColumnIndex(REQUEST_LOCALIZATION_DATE))),
                     cursor.getString(cursor.getColumnIndex(SENDER)),
-                    cursor.getString(cursor.getColumnIndex(RECEIVER)),
-                    cursor.getString(cursor.getColumnIndex(REQUEST_SEND_DATE)),
-                    cursor.getString(cursor.getColumnIndex(REQUEST_RECEIVE_DATE)),
-                    cursor.getString(cursor.getColumnIndex(REQUEST_LOCALIZATION_DATE)),
-                    cursor.getString(cursor.getColumnIndex(LATITUDE)),
-                    cursor.getString(cursor.getColumnIndex(LONGITUDE))
-
-                    );
+                    cursor.getString(cursor.getColumnIndex(RECEIVER))
+            );
             tmp.add(request);
             cursor.moveToNext();
         }
         return tmp;
     }
-
-
 }
