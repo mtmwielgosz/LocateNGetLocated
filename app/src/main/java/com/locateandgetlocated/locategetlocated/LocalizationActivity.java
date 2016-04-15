@@ -56,6 +56,15 @@ public class LocalizationActivity extends AppCompatActivity
                 send.sendRequest(intPhoneNr, "#h#");
             }
         });
+
+        Button testButton = (Button)findViewById(R.id.testButton);
+        testButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Test.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

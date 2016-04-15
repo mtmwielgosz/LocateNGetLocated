@@ -25,6 +25,16 @@ public class Request {
         this.sender = sender;
         this.receiver = receiver;
     }
+    public Request(Date sendDate, String receiver) {
+
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.sendDate = sendDate;
+        this.receiveDate = receiveDate;
+        this.localizationDate = localizationDate;
+        this.sender = sender;
+        this.receiver = receiver;
+    }
 
     public int getId() {
         return id;
@@ -88,6 +98,20 @@ public class Request {
 
     public void setReceiver(String receiver) {
         this.receiver = receiver;
+    }
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "id=" + id +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", sendDate=" + sendDate +
+                ", receiveDate=" + receiveDate +
+                ", localizationDate=" + localizationDate +
+                ", sender='" + sender + '\'' +
+                ", receiver='" + receiver + '\'' +
+                '}';
     }
 }
 
