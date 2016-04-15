@@ -1,9 +1,9 @@
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".MapActivity" >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:rsv="http://schemas.android.com/apk/res-auto"
+    tools:context=".MapActivity">
 
 
 
@@ -16,7 +16,8 @@ tools:context=".MapActivity" >
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="left|top">
+        android:layout_gravity="left|top"
+        android:weightSum="1">
         <RadioGroup
             android:id="@+id/radioGroupWidoki"
             android:layout_width="match_parent"
@@ -82,7 +83,30 @@ tools:context=".MapActivity" >
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context="com.locateandgetlocated.locategetlocated.MapsActivity" />
+            android:layout_height="380dp"
+            tools:context="com.locateandgetlocated.locategetlocated.MapsActivity"
+            android:layout_weight="0.64" />
+
+        <com.locateandgetlocated.locategetlocated.RangeSliderView
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginTop="20dp"
+            rsv:filledColor="#006600"
+            rsv:emptyColor="#a8aeb8"
+            rsv:rangeCount="10"
+            rsv:barHeightPercent="0.1"
+            android:id="@+id/timelineSlider"
+            android:orientation="vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/data"
+            android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
+
+
 </FrameLayout>
