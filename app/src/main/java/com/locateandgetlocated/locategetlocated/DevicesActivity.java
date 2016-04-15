@@ -119,8 +119,7 @@ public class DevicesActivity extends AppCompatActivity
             intent = new Intent(this, HistoryActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_devices) {
-            intent = new Intent(this, DevicesActivity.class);
-            startActivity(intent);
+            //do nothing
         } else if (id == R.id.nav_settings) {
             intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);

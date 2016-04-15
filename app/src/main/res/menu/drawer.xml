@@ -23,5 +23,4 @@
             android:icon="@drawable/ic_menu_about"
             android:title="O aplikacji" />
     </group>
-
 </menu>

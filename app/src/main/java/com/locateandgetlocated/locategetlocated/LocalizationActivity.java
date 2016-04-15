@@ -42,10 +42,9 @@ public class LocalizationActivity extends AppCompatActivity
         setTitle(R.string.title_activity_localization);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         Button localize = (Button) findViewById(R.id.button);
         final EditText phoneNr = (EditText) findViewById(R.id.editText);
-      //  final String intPhoneNr = phoneNr.getText().toString();
+        //  final String intPhoneNr = phoneNr.getText().toString();
         final SMSSender send = new SMSSender();
         localize.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,8 +91,7 @@ public class LocalizationActivity extends AppCompatActivity
         int id = item.getItemId();
         Intent intent;
         if (id == R.id.nav_localization) {
-            intent = new Intent(this, LocalizationActivity.class);
-            startActivity(intent);
+            //do nothing
         } else if (id == R.id.nav_history) {
             intent = new Intent(this, HistoryActivity.class);
             startActivity(intent);
