@@ -1,6 +1,7 @@
 package com.locateandgetlocated.locategetlocated;
 
 import java.util.Date;
+import java.util.StringTokenizer;
 
 /**
  * Created by kamil on 2016-04-08.
@@ -12,19 +13,18 @@ public class Request {
     private Date sendDate;
     private Date receiveDate;
     private Date localizationDate;
-    private String sender;
     private String receiver;
 
-    public Request(int id, double latitude, double longitude, Date sendDate, Date receiveDate, Date localizationDate, String sender, String receiver) {
+    public Request(int id, double latitude, double longitude, Date sendDate, Date receiveDate, Date localizationDate, String receiver) {
         this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
         this.sendDate = sendDate;
         this.receiveDate = receiveDate;
         this.localizationDate = localizationDate;
-        this.sender = sender;
         this.receiver = receiver;
     }
+
     public Request(Date sendDate, String receiver) {
 
         this.latitude = latitude;
@@ -32,7 +32,6 @@ public class Request {
         this.sendDate = sendDate;
         this.receiveDate = receiveDate;
         this.localizationDate = localizationDate;
-        this.sender = sender;
         this.receiver = receiver;
     }
 
@@ -58,10 +57,6 @@ public class Request {
 
     public Date getLocalizationDate() {
         return localizationDate;
-    }
-
-    public String getSender() {
-        return sender;
     }
 
     public String getReceiver() {
@@ -92,14 +87,18 @@ public class Request {
         this.localizationDate = localizationDate;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
     public void setReceiver(String receiver) {
         this.receiver = receiver;
     }
 
+    @Override
+    public String toString() {
+        return "Request{" +
+                "id=" + id +
+                '}';
+    }
+
+    /**
     @Override
     public String toString() {
         return "Request{" +
@@ -109,9 +108,11 @@ public class Request {
                 ", sendDate=" + sendDate +
                 ", receiveDate=" + receiveDate +
                 ", localizationDate=" + localizationDate +
-                ", sender='" + sender + '\'' +
                 ", receiver='" + receiver + '\'' +
                 '}';
     }
+    **/
+
+
 }
 

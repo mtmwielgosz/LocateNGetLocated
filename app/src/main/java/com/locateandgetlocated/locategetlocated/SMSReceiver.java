@@ -43,6 +43,7 @@ public class SMSReceiver extends BroadcastReceiver {
 
 
             if (message.startsWith(CLIENT_PREFIX)) {
+                Toast.makeText(context, "client prefix", Toast.LENGTH_LONG ).show();
                 String latitude = message.split("#")[2];
                 String longitude = message.split("#")[3];
                 Toast.makeText(context, "wyswietlanie na mapie, dodanie do bazy, otrzymane wspolrzedne: " + latitude + "; " + longitude, Toast.LENGTH_LONG).show();
