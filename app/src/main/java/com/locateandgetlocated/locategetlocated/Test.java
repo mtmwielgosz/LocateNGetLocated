@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +21,9 @@ import java.util.StringTokenizer;
 
 public class Test extends AppCompatActivity {
 
+
+    Button addRequestBtn, removeRequestBtn;
+    EditText testRequestIdEditText;
     ListView listView;
     ListAdapter listAdapter;
     String[] tab;
@@ -30,36 +35,52 @@ public class Test extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-     //   getApplicationContext().deleteDatabase("lngl.db");
+        //   getApplicationContext().deleteDatabase("lngl.db");
+
+        addRequestBtn = (Button) findViewById(R.id.testAddRequestBtn);
+        removeRequestBtn = (Button) findViewById(R.id.testRemoveRequestBtn);
+        testRequestIdEditText = (EditText) findViewById(R.id.testRequestIdEditText);
         listView = (ListView) findViewById(R.id.testListView);
 
 
         dbHandler = new DBHandler(this, null, null, 1);
 
-        Date date = new Date();
-        Request request = new Request(date, "5554");
+        addRequestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Date date = new Date();
+                Request request = new Request(date, "5554");
+                dbHandler.addRequest(request);
+                refreshAdapter();
+            }
+        });
 
-        Toast.makeText(getApplicationContext(), String.valueOf(date.getTime()), Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), (new Date(date.getTime())).toString(), Toast.LENGTH_LONG).show();
+        removeRequestBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dbHandler.deleteRequest(testRequestIdEditText.getText().toString());
+                refreshAdapter();
+            }
+        });
 
-        dbHandler.addRequest(request);
+
         TextView textView = (TextView) findViewById(R.id.testTextView);
 
 
         /**
-        Request tmp = dbHandler.getRequestsArrayList().get(dbHandler.getRequestsArrayList().size()-1);
+         Request tmp = dbHandler.getRequestsArrayList().get(dbHandler.getRequestsArrayList().size()-1);
 
-        String tmpString =
-                 "id " + tmp.getId() + "\n"
-                + "lat " + tmp.getLatitude() + "\n"
-                + "lon " + tmp.getLongitude() + "\n"
-                + "sen " + tmp.getSendDate() + "\n"
-                + "rec " + tmp.getReceiveDate() + "\n"
-                + "loc " + tmp.getLocalizationDate() + "\n";
+         String tmpString =
+         "id " + tmp.getId() + "\n"
+         + "lat " + tmp.getLatitude() + "\n"
+         + "lon " + tmp.getLongitude() + "\n"
+         + "sen " + tmp.getSendDate() + "\n"
+         + "rec " + tmp.getReceiveDate() + "\n"
+         + "loc " + tmp.getLocalizationDate() + "\n";
 
-        textView.setText(tmpString);
+         textView.setText(tmpString);
 
-**/
+         **/
 
         refreshAdapter();
     }
