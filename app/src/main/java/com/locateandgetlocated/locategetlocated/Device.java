@@ -4,14 +4,30 @@ package com.locateandgetlocated.locategetlocated;
  * Created by kamil on 2016-04-15.
  */
 public class Device {
+    private int id;
     String phoneNumber;
     String deviceName;
     int deviceType;
+
+    public Device(int id, String phoneNumber, String deviceName, int deviceType) {
+        this.id = id;
+        this.phoneNumber = phoneNumber;
+        this.deviceName = deviceName;
+        this.deviceType = deviceType;
+    }
 
     public Device(String phoneNumber, String deviceName, int deviceType) {
         this.phoneNumber = phoneNumber;
         this.deviceName = deviceName;
         this.deviceType = deviceType;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getPhoneNumber() {
