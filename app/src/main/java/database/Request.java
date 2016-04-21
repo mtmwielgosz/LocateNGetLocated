@@ -1,4 +1,4 @@
-package com.locateandgetlocated.locategetlocated;
+package database;
 
 import java.util.Date;
 import java.util.StringTokenizer;

@@ -1,40 +1,24 @@
-package com.locateandgetlocated.locategetlocated;
+package activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
-import android.widget.TextView;
 
-public class DeviceHistoryActivity extends AppCompatActivity {
+import com.locateandgetlocated.locategetlocated.R;
+
+public class DeviceActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_history);
+        setContentView(R.layout.activity_device);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Samsung");
-        TextView temp = (TextView) findViewById(R.id.textView);
-        final Bundle data = new Bundle();
-
-        data.putDouble("dlugosc",17.052048 );
-        data.putDouble("szerokosc", 51.101741 );
-        data.putString("nazwa", "Samsung");
-        data.putString("data", "15.03.2016");
-        data.putString("godzina", "21:25");
-        temp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                intent.putExtras(data);
-                startActivity(intent);
-            }
-        });
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,6 +28,16 @@ public class DeviceHistoryActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.device, menu);
+
+
+
+        return true;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.locateandgetlocated.locategetlocated;
+package sms;
 
 import android.telephony.SmsManager;
 

@@ -1,4 +1,4 @@
-package com.locateandgetlocated.locategetlocated;
+package sms;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
+
+import lokalization.LocationTracker;
 
 /**
  * Created by Kamil on 2016-03-04.

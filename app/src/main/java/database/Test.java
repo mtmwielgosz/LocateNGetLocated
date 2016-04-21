@@ -1,4 +1,4 @@
-package com.locateandgetlocated.locategetlocated;
+package database;
 
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -11,13 +11,10 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.locateandgetlocated.locategetlocated.R;
 
 import java.util.Date;
-import java.util.List;
-import java.util.StringTokenizer;
 
 public class Test extends AppCompatActivity {
 

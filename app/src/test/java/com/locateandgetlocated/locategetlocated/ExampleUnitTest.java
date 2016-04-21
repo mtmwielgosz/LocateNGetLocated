@@ -2,6 +2,8 @@ package com.locateandgetlocated.locategetlocated;
 
 import org.junit.Test;
 
+import database.Test;
+
 import static org.junit.Assert.*;
 
 /**

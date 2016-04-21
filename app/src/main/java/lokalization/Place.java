@@ -1,4 +1,4 @@
-package com.locateandgetlocated.locategetlocated;
+package lokalization;
 
 import com.google.android.gms.maps.model.LatLng;
 

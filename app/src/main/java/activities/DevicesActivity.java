@@ -1,6 +1,5 @@
-package com.locateandgetlocated.locategetlocated;
+package activities;
 
-import android.bluetooth.BluetoothClass;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +16,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import fragments.LocalizedFragment;
+import fragments.LocatingFragment;
+import com.locateandgetlocated.locategetlocated.R;
+import extra.ViewPagerAdapter;
 
 public class DevicesActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

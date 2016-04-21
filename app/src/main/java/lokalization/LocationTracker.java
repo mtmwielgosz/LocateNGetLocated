@@ -1,4 +1,4 @@
-package com.locateandgetlocated.locategetlocated;
+package lokalization;
 
 import android.content.Context;
 import android.location.Location;
@@ -10,13 +10,8 @@ import android.os.Bundle;
  * Created by Kamil on 2016-04-03.
  */
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
 import android.provider.Settings;
 
 /**

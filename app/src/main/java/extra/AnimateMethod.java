@@ -1,4 +1,4 @@
-package com.locateandgetlocated.locategetlocated;
+package extra;
 
 
 import java.lang.annotation.ElementType;

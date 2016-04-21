@@ -1,4 +1,4 @@
-package com.locateandgetlocated.locategetlocated;
+package extra;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
+
+import com.locateandgetlocated.locategetlocated.R;
 
 import java.util.concurrent.TimeUnit;
 

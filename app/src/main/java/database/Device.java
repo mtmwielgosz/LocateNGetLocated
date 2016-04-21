@@ -1,4 +1,4 @@
-package com.locateandgetlocated.locategetlocated;
+package database;
 
 /**
  * Created by kamil on 2016-04-15.

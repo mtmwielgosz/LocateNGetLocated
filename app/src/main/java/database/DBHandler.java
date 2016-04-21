@@ -1,4 +1,4 @@
-package com.locateandgetlocated.locategetlocated;
+package database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,10 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-import android.os.SystemClock;
-import android.widget.Toast;
 
-import java.io.Console;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;

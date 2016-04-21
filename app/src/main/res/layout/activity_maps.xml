@@ -84,10 +84,10 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="380dp"
-            tools:context="com.locateandgetlocated.locategetlocated.MapsActivity"
+            tools:context="activities.MapsActivity"
             android:layout_weight="0.64" />
 
-        <com.locateandgetlocated.locategetlocated.RangeSliderView
+        <extra.RangeSliderView
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_marginTop="20dp"
