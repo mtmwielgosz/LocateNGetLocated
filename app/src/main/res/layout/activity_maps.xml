@@ -77,15 +77,35 @@
 
         </RadioGroup>
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:map="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="380dp"
-            tools:context="activities.MapsActivity"
-            android:layout_weight="0.64" />
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="poprzednie"
+                android:id="@+id/prevLocationsBTN"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/dataTB"
+                android:layout_weight="1"
+                android:textSize="12dp"
+                android:textAlignment="center" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Nastepne"
+                android:id="@+id/nextlocationsBTN"
+                android:layout_weight="1" />
+        </LinearLayout>
 
         <extra.RangeSliderView
             android:layout_width="wrap_content"
@@ -98,13 +118,14 @@
             android:id="@+id/timelineSlider"
             android:orientation="vertical" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
-            android:id="@+id/data"
-            android:layout_gravity="center_horizontal" />
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="activities.MapsActivity" />
 
     </LinearLayout>
 
