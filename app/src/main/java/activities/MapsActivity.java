@@ -102,7 +102,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     current_indeks++;
                     newPosition(locations[current_indeks].getCoordinates(),locations[current_indeks].getHour(),locations[current_indeks].getDate());
                     dataTB.setText(current_indeks + 1 + "/" + locations.length + "\n" + locations[current_indeks].getHour() + " - " + locations[current_indeks].getDate());
-                    if(current_indeks -13 < current_indeks ){ timeline.setInitialIndex(current_indeks-13);}
+                    if( current_indeks >= 13 ){ timeline.setInitialIndex(current_indeks-13);}
                 }
 
             }
