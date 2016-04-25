@@ -11,14 +11,15 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.locateandgetlocated.locategetlocated.R;
 
 import java.util.Date;
 
+import sms.*;
+
 public class Test extends AppCompatActivity {
-
-
     Button addRequestBtn, removeRequestBtn;
     EditText testRequestIdEditText;
     ListView listView;
@@ -32,22 +33,26 @@ public class Test extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        // czyszczenie bazy
         //   getApplicationContext().deleteDatabase("lngl.db");
-
+        dbHandler = new DBHandler(this, null, null, 1);
         addRequestBtn = (Button) findViewById(R.id.testAddRequestBtn);
         removeRequestBtn = (Button) findViewById(R.id.testRemoveRequestBtn);
         testRequestIdEditText = (EditText) findViewById(R.id.testRequestIdEditText);
         listView = (ListView) findViewById(R.id.testListView);
 
+        final Device device1 = new Device("5554", "lokalizowany1", 1);
+        dbHandler.addDevice(device1);
 
-        dbHandler = new DBHandler(this, null, null, 1);
-
+        Toast.makeText(getApplicationContext(), "liczba urzadzen: " + dbHandler.getDevicesArrayList().size(), Toast.LENGTH_LONG).show();
         addRequestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Date date = new Date();
-                Request request = new Request(date, "5554");
+                Request request = new Request(date, device1);
                 dbHandler.addRequest(request);
+                SMSSender smsSender = new SMSSender();
+                smsSender.sendRequest(request,"#h#");
                 refreshAdapter();
             }
         });
@@ -60,9 +65,7 @@ public class Test extends AppCompatActivity {
             }
         });
 
-
         TextView textView = (TextView) findViewById(R.id.testTextView);
-
 
         /**
          Request tmp = dbHandler.getRequestsArrayList().get(dbHandler.getRequestsArrayList().size()-1);
@@ -74,11 +77,8 @@ public class Test extends AppCompatActivity {
          + "sen " + tmp.getSendDate() + "\n"
          + "rec " + tmp.getReceiveDate() + "\n"
          + "loc " + tmp.getLocalizationDate() + "\n";
-
          textView.setText(tmpString);
-
          **/
-
         refreshAdapter();
     }
 
@@ -94,6 +94,4 @@ public class Test extends AppCompatActivity {
             }
         });
     }
-
-
 }

@@ -9,6 +9,11 @@ public class Device {
     String deviceName;
     int deviceType;
 
+    /**
+     * 1 - lokalizowany
+     * 2 - lokalizujacy
+     **/
+
     public Device(int id, String phoneNumber, String deviceName, int deviceType) {
         this.id = id;
         this.phoneNumber = phoneNumber;

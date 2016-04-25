@@ -1,5 +1,5 @@
 package sms;
-
+import database.*;
 import android.telephony.SmsManager;
 
 /**
@@ -11,9 +11,14 @@ public class SMSSender {
     public SMSSender() {
     }
 
-    public void sendRequest(String receiver, String message) {
+    public void sendSMS(String receiver, String message) {
         smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(receiver, null, message, null, null);
+    }
+
+    public void sendRequest(Request request, String message){
+        smsManager=SmsManager.getDefault();
+        smsManager.sendTextMessage(request.getReceiver(), null, message, null, null);
     }
 
 }

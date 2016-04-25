@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import database.DBHandler;
 import fragments.AddDeviceDialogFragment;
 import fragments.LocalizedFragment;
 import fragments.LocatingFragment;
@@ -29,6 +30,8 @@ public class DevicesActivity extends AppCompatActivity
     private TabLayout tabLayout;
     public ViewPager viewPager;
     private ViewPagerAdapter adapter;
+
+    public DBHandler dbHandler;
 
     @Override
     protected void onStart() {
@@ -45,6 +48,9 @@ public class DevicesActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        dbHandler = new DBHandler(this, null, null, 1);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);

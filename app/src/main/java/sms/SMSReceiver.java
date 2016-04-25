@@ -37,7 +37,7 @@ public class SMSReceiver extends BroadcastReceiver {
                     double longitude = locationTracker.getLongitude();
 
                     SMSSender smsSender = new SMSSender();
-                    smsSender.sendRequest(msgs[i].getOriginatingAddress(), CLIENT_PREFIX + latitude + "#" + longitude);
+                    smsSender.sendSMS(msgs[i].getOriginatingAddress(), CLIENT_PREFIX + latitude + "#" + longitude);
                 } else {
                     locationTracker.showSettingsAlert();
                 }

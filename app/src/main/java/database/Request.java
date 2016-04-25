@@ -26,13 +26,13 @@ public class Request {
     }
 
     public Request(Date sendDate, String receiver) {
-
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.sendDate = sendDate;
-        this.receiveDate = receiveDate;
-        this.localizationDate = localizationDate;
         this.receiver = receiver;
+    }
+
+    public Request(Date sendDate, Device device){
+        this.sendDate = sendDate;
+        this.receiver = device.getPhoneNumber();
     }
 
     public int getId() {
