@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.locateandgetlocated.locategetlocated.R;
 
+import database.DBHandler;
+import database.Device;
 import fragments.AddDeviceDialogFragment;
 import fragments.DeleteDeviceDialogFragment;
 import fragments.EditDeviceDialogFragment;
@@ -23,14 +25,27 @@ public class DeviceActivity extends AppCompatActivity {
     public int deviceId;
     public String deviceName;
     public String phoneNumber;
+    DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO pobranie deviceID z extras i pozostałych danych z bazy
+        dbHandler = new DBHandler(this, null, null, 1);
+
+        int deviceId;
+        if (getIntent().hasExtra("id")) {
+            deviceId = getIntent().getIntExtra("id", -11);
+        } else {
+            throw new IllegalArgumentException("brak urzadzenia");
+        }
+
+        Device device = dbHandler.getDeviceById(deviceId);
+
+        Toast.makeText(getApplicationContext(), " "+deviceId, Toast.LENGTH_LONG).show();
         //Tymczasowy kod
-        deviceName = "Samsung";
-        phoneNumber = "123456789";
+        deviceName = device.getDeviceName();
+        phoneNumber = device.getPhoneNumber();
         //
         setContentView(R.layout.activity_device);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

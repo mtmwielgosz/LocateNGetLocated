@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,22 +35,31 @@ public class LocalizedFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View inputFragmentView = inflater.inflate(R.layout.fragment_localized, container, false);
         // Inflate the layout for this fragment
 
         localizedDevicesListView = (ListView) inputFragmentView.findViewById(R.id.localizedDevicesListView);
 
-        TextView temp = (TextView) inputFragmentView.findViewById(R.id.textView);
-        temp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), DeviceActivity.class);
-                startActivity(intent);
+        localizedDevicesListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Device clickedDevice = (Device) adapterView.getItemAtPosition(i);
+                        Intent intent = new Intent(getActivity().getApplicationContext(), DeviceActivity.class);
+                        intent.putExtra("id", clickedDevice.getId());
+                        startActivity(intent);
+                    }
+                }
+        );
 
-            }
-        });
+
+
+
+
+
+
         refreshAdapter();
         return inputFragmentView;
     }
