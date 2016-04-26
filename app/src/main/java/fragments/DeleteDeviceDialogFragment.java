@@ -31,7 +31,8 @@ public class DeleteDeviceDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         int deviceId = ((DeviceActivity)getActivity()).deviceId;
                         // TODO Usuwanie urządzenia z bazy
-                        Toast.makeText(getActivity().getApplicationContext(), "Pomyślnie usunięto urządzenie", Toast.LENGTH_LONG).show();
+                        ((DeviceActivity) getActivity()).dbHandler.deleteDevice(deviceId);
+                        Toast.makeText(getActivity().getApplicationContext(), "Pomyślnie usunięto urządzenie: " + deviceId, Toast.LENGTH_LONG).show();
                         getActivity().finish();
                     }
                 })

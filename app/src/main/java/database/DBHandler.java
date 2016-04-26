@@ -151,9 +151,13 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void deleteDevice(int deviceId) {
+        deleteDevice(Integer.toString(deviceId));
+    }
+
     public void deleteDevice(String deviceId) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_NAME_DEVICES + " WHERE " + REQUEST_ID + " =\"" + deviceId + "\";");
+        db.execSQL("DELETE FROM " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_ID + " = " + deviceId);
     }
 
     public Device getDeviceById(int id) {

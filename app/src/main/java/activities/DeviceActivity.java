@@ -25,7 +25,7 @@ public class DeviceActivity extends AppCompatActivity {
     public int deviceId;
     public String deviceName;
     public String phoneNumber;
-    DBHandler dbHandler;
+    public DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,6 @@ public class DeviceActivity extends AppCompatActivity {
         // TODO pobranie deviceID z extras i pozostałych danych z bazy
         dbHandler = new DBHandler(this, null, null, 1);
 
-        int deviceId;
         if (getIntent().hasExtra("id")) {
             deviceId = getIntent().getIntExtra("id", -11);
         } else {
