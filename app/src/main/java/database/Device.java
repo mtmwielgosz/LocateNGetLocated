@@ -58,4 +58,14 @@ public class Device {
     public void setDeviceType(int deviceType) {
         this.deviceType = deviceType;
     }
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "id=" + id +
+                ", deviceName='" + deviceName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", deviceType=" + deviceType +
+                '}';
+    }
 }

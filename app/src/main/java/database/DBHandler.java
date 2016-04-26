@@ -156,6 +156,16 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TABLE_NAME_DEVICES + " WHERE " + REQUEST_ID + " =\"" + deviceId + "\";");
     }
 
+
+    public Device[] getDevicesArray() {
+        Device[] tmp = new Device[getDevicesArrayList().size()];
+
+        for (int i = 0; i < tmp.length; i++) {
+            tmp[i] = getDevicesArrayList().get(i);
+        }
+        return tmp;
+    }
+
     public ArrayList<Device> getDevicesArrayList() {
         ArrayList<Device> tmp = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
