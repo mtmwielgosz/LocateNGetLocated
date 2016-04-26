@@ -32,7 +32,7 @@ public class AddDeviceDialogFragment extends DialogFragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        final View alertFragmentView = inflater.inflate(R.layout.dialog_adddevice, null);
+        final View alertFragmentView = inflater.inflate(R.layout.dialog_add_edit_device, null);
 
         builder.setView(alertFragmentView)
                 .setTitle("Dodawanie urządzenia")
@@ -44,13 +44,10 @@ public class AddDeviceDialogFragment extends DialogFragment {
                         EditText editTextPhoneNumber = (EditText)alertFragmentView.findViewById(R.id.editTextPhoneNumber);
 
                         if (type == 0) { //dodajemy urządzenie lokalizowane
-                            // TODO dodawanie lokalizowanego urządzenia do bazy
-
                             Device device = new Device(editTextPhoneNumber.getText().toString(), editTextDeviceName.getText().toString(), 1);
                             ((DevicesActivity)getActivity()).dbHandler.addDevice(device);
                             Toast.makeText(getActivity().getApplicationContext(), "dodane urzadzenie lokalizowane", Toast.LENGTH_LONG).show();
                         } else { //dodajemy urządzenie lokalizujące
-                            // TODO dodowanie lokalizującego urządzenia do bazy
 
                             Device device = new Device(editTextPhoneNumber.getText().toString(), editTextDeviceName.getText().toString(), 2);
                             ((DevicesActivity)getActivity()).dbHandler.addDevice(device);

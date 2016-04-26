@@ -56,7 +56,7 @@ public class LocalizationActivity extends AppCompatActivity
                 String intPhoneNr = phoneNr.getText().toString();
 
                 Toast.makeText(getApplicationContext(), intPhoneNr + " ", Toast.LENGTH_LONG).show();
-                send.sendRequest(intPhoneNr, "#h#");
+                //send.sendRequest(intPhoneNr, "#h#");
             }
         });
 
