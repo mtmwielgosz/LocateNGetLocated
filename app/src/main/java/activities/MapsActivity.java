@@ -1,11 +1,13 @@
 package activities;
 
+import android.graphics.Color;
 import android.location.Location;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,24 +20,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.locateandgetlocated.locategetlocated.R;
 import extra.RangeSliderView;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
 
 import lokalization.Place;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-   // private Double latitude=0.;
-   // private Double longitude=0.;
- //   private String date="Brak danych";
-    private String device_name="Brak danych";
-    //private String hour="Brak danych";
+
+    private String device_name="SAMSUNG";
 
     private int current_indeks=22;
     private Button button_Normal;
@@ -45,13 +37,56 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button button_nextLocations;
     private Button button_prevLocations;
     private TextView dataTB;
+    private TextView counter;
     private CameraPosition cameraPosition;
     private GoogleMap mMap;
     private RangeSliderView timeline;
-    private Map<String, Place> placesTMP = new HashMap<String, Place>();
-    private TextView data;
+   // private Map<String, Place> placesTMP = new HashMap<String, Place>();
+  //  private TextView data;
     Place[] locations;
     private List<Place> currentPlaces  = new ArrayList<Place>(); ;
+    private HorizontalScrollView timelineSV;
+    private LinearLayout timelineLayout;
+    private Button[] dateButtons;
+    private int buttonCurrentFocusIndex;
+
+    protected void createTimeline(){
+        buttonCurrentFocusIndex =locations.length-1;
+        timelineSV = (HorizontalScrollView ) findViewById(R.id.timelineSV);
+        dateButtons=new Button[locations.length];
+        timelineLayout = (LinearLayout) findViewById(R.id.timelineLayout);
+
+        for(int i=0; i<locations.length; i++){
+            final int z =i;
+           dateButtons[i] = new Button(this);
+            dateButtons[i].setText(locations[i].getHour() + "\n" + locations[i].getDate());
+            dateButtons[i].setTextColor(Color.rgb(255, 255, 255));
+            dateButtons[i].setBackgroundColor(Color.rgb(128, 128, 128));
+            dateButtons[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            timelineLayout.addView(dateButtons[i]);
+            dateButtons[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dateButtons[buttonCurrentFocusIndex].setBackgroundColor(Color.rgb(128, 128, 128));
+                    buttonCurrentFocusIndex =z;
+                    dateButtons[z].setBackgroundColor(Color.rgb(0, 0, 0));
+                    setCurrentPosition(locations[z].getCoordinates(), locations[z].getDate(), locations[z].getHour());
+
+
+
+                }
+
+            });
+
+        }
+
+        timelineSV.post(new Runnable() {
+            public void run() {
+                timelineSV.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+            }
+        });
+        dateButtons[buttonCurrentFocusIndex].setBackgroundColor(Color.rgb(0, 0, 0));        //timelineSV.scrollTo(0, timelineSV.getPaddingEnd());
+    }
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +96,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        counter = (TextView) findViewById(R.id.counter);
         dataTB = (TextView) findViewById(R.id.dataTB);
         button_Normal = (Button) findViewById(R.id.buttonNormalny);
-        button_prevLocations = (Button) findViewById(R.id.prevLocationsBTN);
-        button_nextLocations = (Button) findViewById(R.id.nextlocationsBTN);
         button_Hybrid = (Button) findViewById(R.id.buttonSatelita);
         button_Terrain = (Button) findViewById(R.id.buttonTeren);
         button_DeviceLocation = (Button) findViewById(R.id.buttonLokalizacjaUrzadzenia);
-      //  data = (TextView) findViewById(R.id.data);
         setPlacesTMP();
-        timeline = (RangeSliderView) findViewById(R.id.timelineSlider);
+        createTimeline();
+
         button_DeviceLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,49 +129,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 setOnMixed(v);
             }
         });
-        button_nextLocations.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (current_indeks < locations.length -1) {
-                    current_indeks++;
-                    newPosition(locations[current_indeks].getCoordinates(),locations[current_indeks].getHour(),locations[current_indeks].getDate());
-                    dataTB.setText(current_indeks + 1 + "/" + locations.length + "\n" + locations[current_indeks].getHour() + " - " + locations[current_indeks].getDate());
-                    if( current_indeks >= 13 ){ timeline.setInitialIndex(current_indeks-13);}
-                }
-
-            }
-        });
-
-        button_prevLocations.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (current_indeks >= 1) {
-                    current_indeks--;
-                    newPosition(locations[current_indeks].getCoordinates(),locations[current_indeks].getHour(),locations[current_indeks].getDate());
-                    dataTB.setText(current_indeks + 1 + "/" + locations.length + "\n" + locations[current_indeks].getHour() + " - " + locations[current_indeks].getDate());
-                    if(current_indeks -13 >=0){timeline.setInitialIndex(current_indeks-13);}
-                }
-
-            }
-        });
-
-
-
-
-        final RangeSliderView.OnSlideListener listenerTimeline = new RangeSliderView.OnSlideListener() {
-            @Override
-            public void onSlide(int index) {
-                current_indeks=locations.length -10 + index;
-                Place tmp = locations[current_indeks];
-                newPosition(locations[current_indeks].getCoordinates(), locations[current_indeks].getDate(), locations[current_indeks].getHour());
-                dataTB.setText(current_indeks + 1 + "/" + locations.length + "\n" + locations[current_indeks].getHour() + " - " + locations[current_indeks].getDate());
-            }
-        };
-        timeline.setOnSlideListener(listenerTimeline);
-        timeline.setInitialIndex(9);
-
-
-
     }
 
 
@@ -163,28 +154,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
            // current_indeks = pos.getInt("godzina");
         }
 
-            mMap.addMarker(new MarkerOptions().position(locations[current_indeks].getCoordinates()).title(device_name).snippet(locations[current_indeks].getHour() + " - " + locations[current_indeks].getDate()));
+        mMap.addMarker(new MarkerOptions().position(locations[current_indeks].getCoordinates()).title(device_name).snippet(locations[current_indeks].getHour() + " - " + locations[current_indeks].getDate()));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
-            dataTB.setText(current_indeks + 1 + "/" + locations.length + "\n" + locations[current_indeks].getHour() + " - " + locations[current_indeks].getDate());
-        //data.setText(locations[current_indeks].getHour() + " - " + locations[current_indeks].getDate());
-        newPosition(locations[current_indeks].getCoordinates(), locations[current_indeks].getDate(), locations[current_indeks].getHour());
-       // newPosition(placesTMP.get(8 + "").getCoordinates(), placesTMP.get(8 + "").getDate(), placesTMP.get(8 + "").getHour());
-
-       /* LatLng place = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(place).title(device_name).snippet(hour + " " + date));
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.setMyLocationEnabled(true);
-        data.setText(locations[current_indeks].getDate());
-        newPosition(placesTMP.get(8 + "").getCoordinates(), placesTMP.get(8 + "").getDate(), placesTMP.get(8 + "").getHour());*/
-        /*button_DeviceLocation.setText(device_name);
-        cameraPosition = new CameraPosition.Builder()
-                .target(place)      // Sets the center of the map to Mountain View
-                .zoom(13)                   // Sets the zoom
-                .build();                   // Creates a CameraPosition from the builder
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
+        //dataTB.setText(current_indeks + 1 + "/" + locations.length + "\n" + locations[current_indeks].getHour() + " - " + locations[current_indeks].getDate());
+        setCurrentPosition(locations[locations.length -1].getCoordinates(), locations[locations.length -1].getDate(), locations[locations.length -1].getHour());
     }
 
     public void setOnMixed(View view)
@@ -192,9 +167,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
 
-    public void newPosition(LatLng p, String d, String h){
-
-      // data.setText(d + " - " + h);
+    public void setCurrentPosition(LatLng p, String d, String h){
+        dataTB.setText(device_name);
+        counter.setText((buttonCurrentFocusIndex + 1) + "/" + locations.length );
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(p).title(device_name).snippet(h+ " " + d));
         button_DeviceLocation.setText(device_name);
@@ -230,9 +205,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void setPlacesTMP(){
-      locations=new Place[23];
-        for(int i =0; i<23; i++){
-            locations[i]=new Place(new LatLng(51.10828596112606 + i,17.05601692199707 +i),i+".04.2016","10:"+i);
+      locations=new Place[21];
+        for(int i =0; i<21; i++){
+            locations[i]=new Place(new LatLng(51.10828596112606 + i,17.05601692199707 +i),(i+10)+".05.2016","10:"+(i+10));
        }
 
 

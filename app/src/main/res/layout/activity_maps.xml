@@ -57,7 +57,7 @@
                 android:background="#aaa" />
 
             <Button
-                android:layout_width="100dp"
+                android:layout_width="98dp"
                 android:layout_height="wrap_content"
                 android:text="Satelita"
                 android:id="@+id/buttonSatelita" />
@@ -78,45 +78,46 @@
         </RadioGroup>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="poprzednie"
-                android:id="@+id/prevLocationsBTN"
-                android:layout_weight="1" />
+            android:layout_height="49dp"
+            android:background="#505050">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="30dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
                 android:id="@+id/dataTB"
-                android:layout_weight="1"
-                android:textSize="12dp"
-                android:textAlignment="center" />
+                android:textSize="22dp"
+                android:textAlignment="center"
+                android:textColor="#423d3d"
+                android:background="#f7f7f7"
+                android:textIsSelectable="false" />
 
-            <Button
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Nastepne"
-                android:id="@+id/nextlocationsBTN"
-                android:layout_weight="1" />
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Small Text"
+                android:id="@+id/counter"
+                android:textAlignment="center"
+                android:background="#f7f7f7" />
+
         </LinearLayout>
 
-        <extra.RangeSliderView
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginTop="20dp"
-            rsv:filledColor="#006600"
-            rsv:emptyColor="#a8aeb8"
-            rsv:rangeCount="10"
-            rsv:barHeightPercent="0.1"
-            android:id="@+id/timelineSlider"
-            android:orientation="vertical" />
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/timelineSV"
+            android:fillViewport="false" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/timelineLayout"></LinearLayout>
+        </HorizontalScrollView>
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
