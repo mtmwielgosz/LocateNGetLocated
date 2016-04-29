@@ -154,7 +154,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
            // current_indeks = pos.getInt("godzina");
         }
 
-        mMap.addMarker(new MarkerOptions().position(locations[current_indeks].getCoordinates()).title(device_name).snippet(locations[current_indeks].getHour() + " - " + locations[current_indeks].getDate()));
+      //  mMap.addMarker(new MarkerOptions().position(locations[locations.length-1].getCoordinates()).title(device_name).snippet(locations[locations.length-1].getHour() + " - " + locations[locations.length-1].getDate()));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
@@ -205,8 +205,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void setPlacesTMP(){
-      locations=new Place[21];
-        for(int i =0; i<21; i++){
+      locations=new Place[22];
+        for(int i =0; i<locations.length; i++){
             locations[i]=new Place(new LatLng(51.10828596112606 + i,17.05601692199707 +i),(i+10)+".05.2016","10:"+(i+10));
        }
 
