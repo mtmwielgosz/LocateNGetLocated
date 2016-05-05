@@ -1,4 +1,4 @@
-package lokalization;
+package localization;
 
 import android.content.Context;
 import android.location.Location;

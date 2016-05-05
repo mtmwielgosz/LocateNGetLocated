@@ -23,7 +23,7 @@ import extra.RangeSliderView;
 import java.util.ArrayList;
 import java.util.List;
 
-import lokalization.Place;
+import localization.Place;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 

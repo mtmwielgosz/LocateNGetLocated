@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
 
-import lokalization.LocationTracker;
+import localization.LocationTracker;
 
 /**
  * Created by Kamil on 2016-03-04.
