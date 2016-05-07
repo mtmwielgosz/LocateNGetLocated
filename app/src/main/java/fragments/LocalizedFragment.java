@@ -55,11 +55,6 @@ public class LocalizedFragment extends Fragment {
         );
 
 
-
-
-
-
-
         refreshAdapter();
         return inputFragmentView;
     }

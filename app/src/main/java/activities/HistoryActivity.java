@@ -1,6 +1,7 @@
 package activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -11,12 +12,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.locateandgetlocated.locategetlocated.R;
 
+import database.DBHandler;
+import database.Device;
+
 public class HistoryActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public ListView devicesListView;
+    public DBHandler dbHandler;
 
     @Override
     protected void onStart() { //Zmiana wybranej pozycji w menu głównym
@@ -36,14 +47,35 @@ public class HistoryActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        TextView temp = (TextView) findViewById(R.id.textView);
-        temp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), DeviceHistoryActivity.class);
-                startActivity(intent);
-            }
-        });
+
+
+//        TextView temp = (TextView) findViewById(R.id.textView);
+//        temp.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getApplicationContext(), DeviceHistoryActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+
+
+        devicesListView = (ListView) findViewById(R.id.listView);
+        dbHandler = new DBHandler(this, null, null, 1);
+
+        devicesListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Device clickedDevice = (Device) adapterView.getItemAtPosition(i);
+                        Intent intent = new Intent(getApplicationContext(), DeviceHistoryActivity.class);
+                        intent.putExtra("id", clickedDevice.getId());
+                        startActivity(intent);
+                    }
+                }
+        );
+
+
+        refreshAdapter();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -74,6 +106,18 @@ public class HistoryActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void refreshAdapter() {
+        devicesListView.setAdapter(new ArrayAdapter<Device>(getApplicationContext(), android.R.layout.simple_list_item_1, (dbHandler.getDevicesArray())) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                textView.setTextColor(Color.BLACK);
+                return view;
+            }
+        });
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
