@@ -1,9 +1,11 @@
 package fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,8 @@ import com.locateandgetlocated.locategetlocated.R;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 import activities.DeviceActivity;
 import activities.DevicesActivity;
 import database.Device;
@@ -26,6 +30,9 @@ import database.Device;
 public class LocatingFragment extends Fragment {
 
     ListView locatingDevicesListView;
+    CustomAdapter customAdapter;
+    final AdapterSingleton adapterSingleton = AdapterSingleton.getmInstance();
+    ArrayList<Device> devices;
 
     public LocatingFragment() {
         // Required empty public constructor
@@ -36,8 +43,7 @@ public class LocatingFragment extends Fragment {
         super.onCreate(savedInstanceState);    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inputFragmentView =  inflater.inflate(R.layout.fragment_locating, container, false);
         // Inflate the layout for this fragment
 
@@ -55,37 +61,13 @@ public class LocatingFragment extends Fragment {
                 }
         );
 
-
-
-
-
-        TextView temp = (TextView) inputFragmentView.findViewById(R.id.textView);
-        temp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), DeviceActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
-
-        refreshAdapter();
+        Context context = getActivity().getApplicationContext();//((DevicesActivity) getActivity()).getApplicationContext();
+        devices = ((DevicesActivity) getActivity()).dbHandler.getDevicesArrayListByType(2);
+        customAdapter = new CustomAdapter(context, devices);
+        adapterSingleton.setLocatingCustomAdapter(customAdapter);
+        adapterSingleton.setLocatingDevices(devices);
+        adapterSingleton.setDbHandler(((DevicesActivity) getActivity()).dbHandler);
+        locatingDevicesListView.setAdapter(customAdapter);
         return inputFragmentView;
-    }
-
-
-
-
-    private void refreshAdapter() {
-        locatingDevicesListView.setAdapter(new ArrayAdapter<Device>(((DevicesActivity)getActivity()).getApplicationContext(), android.R.layout.simple_list_item_1, ((DevicesActivity)getActivity()).dbHandler.getDevicesArrayByType(2)) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView textView = (TextView) view.findViewById(android.R.id.text1);
-                textView.setTextColor(Color.BLACK);
-                return view;
-            }
-        });
     }
 }

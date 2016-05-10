@@ -158,6 +158,11 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateDevice(Device device){
+        String query = String.format("UPDATE .%s SET .%s = .%s, .%s = .%s WHERE %s=", TABLE_NAME_DEVICES, DEVICE_NAME, device.getDeviceName(), DEVICE_NUMBER, device.getPhoneNumber(), DEVICE_ID, device.getId());
+    }
+
+
     public void deleteDevice(int deviceId) {
         deleteDevice(Integer.toString(deviceId));
     }

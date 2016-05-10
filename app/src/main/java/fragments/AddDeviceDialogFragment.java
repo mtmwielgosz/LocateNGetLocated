@@ -21,6 +21,7 @@ import activities.DevicesActivity;
  * Created by Krzysztof on 24.04.2016.
  */
 public class AddDeviceDialogFragment extends DialogFragment {
+    final AdapterSingleton adapterSingleton = AdapterSingleton.getmInstance();
     EditText editTextDeviceName, editTextPhoneNumber;
 
     @Override
@@ -50,6 +51,7 @@ public class AddDeviceDialogFragment extends DialogFragment {
                             ((DevicesActivity)getActivity()).dbHandler.addDevice(device);
                             Toast.makeText(getActivity().getApplicationContext(), "dodane urzadzenie lokalizujace", Toast.LENGTH_LONG).show();
                         }
+                        adapterSingleton.notifyCustomAdapters();
                         // TODO odświeżanie widoku
                     }
                 })

@@ -20,7 +20,9 @@ import database.DBHandler;
 import fragments.AddDeviceDialogFragment;
 import fragments.LocalizedFragment;
 import fragments.LocatingFragment;
+
 import com.locateandgetlocated.locategetlocated.R;
+
 import extra.ViewPagerAdapter;
 
 public class DevicesActivity extends AppCompatActivity
@@ -30,6 +32,10 @@ public class DevicesActivity extends AppCompatActivity
     private TabLayout tabLayout;
     public ViewPager viewPager;
     private ViewPagerAdapter adapter;
+
+    public LocalizedFragment localizedFragment;
+    public LocatingFragment locatingFragment;
+
 
     public DBHandler dbHandler;
 
@@ -136,10 +142,14 @@ public class DevicesActivity extends AppCompatActivity
     }
 
     private void setupViewPager(ViewPager viewPager) {
+        localizedFragment = new LocalizedFragment();
+        locatingFragment = new LocatingFragment();
+
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new LocalizedFragment(), "Lokalizowane");
-        adapter.addFragment(new LocatingFragment(), "Lokalizujące");
+        adapter.addFragment(localizedFragment, "Lokalizowane");
+        adapter.addFragment(locatingFragment, "Lokalizujące");
         viewPager.setAdapter(adapter);
     }
+
 
 }

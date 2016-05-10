@@ -20,6 +20,8 @@ import database.Device;
  * Created by Krzysztof on 26.04.2016.
  */
 public class DeleteDeviceDialogFragment extends DialogFragment {
+    final AdapterSingleton adapterSingleton = AdapterSingleton.getmInstance();
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -32,6 +34,7 @@ public class DeleteDeviceDialogFragment extends DialogFragment {
                         int deviceId = ((DeviceActivity)getActivity()).deviceId;
                         // TODO Usuwanie urządzenia z bazy
                         ((DeviceActivity) getActivity()).dbHandler.deleteDevice(deviceId);
+                        adapterSingleton.notifyCustomAdapters();
                         Toast.makeText(getActivity().getApplicationContext(), "Pomyślnie usunięto urządzenie: " + deviceId, Toast.LENGTH_LONG).show();
                         getActivity().finish();
                     }
