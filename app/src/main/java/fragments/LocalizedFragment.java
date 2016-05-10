@@ -60,7 +60,7 @@ public class LocalizedFragment extends Fragment {
     }
 
     private void refreshAdapter() {
-        localizedDevicesListView.setAdapter(new ArrayAdapter<Device>(((DevicesActivity)getActivity()).getApplicationContext(), android.R.layout.simple_list_item_1, ((DevicesActivity)getActivity()).dbHandler.getDevicesArray()) {
+        localizedDevicesListView.setAdapter(new ArrayAdapter<Device>(((DevicesActivity)getActivity()).getApplicationContext(), android.R.layout.simple_list_item_1, ((DevicesActivity)getActivity()).dbHandler.getDevicesArrayByType(1)) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);

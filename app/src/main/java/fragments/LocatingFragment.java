@@ -1,11 +1,15 @@
 package fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.locateandgetlocated.locategetlocated.R;
@@ -13,12 +17,15 @@ import com.locateandgetlocated.locategetlocated.R;
 import org.w3c.dom.Text;
 
 import activities.DeviceActivity;
+import activities.DevicesActivity;
 import database.Device;
 
 /**
  * Created by Krzysztof on 15.03.2016.
  */
 public class LocatingFragment extends Fragment {
+
+    ListView locatingDevicesListView;
 
     public LocatingFragment() {
         // Required empty public constructor
@@ -33,6 +40,25 @@ public class LocatingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View inputFragmentView =  inflater.inflate(R.layout.fragment_locating, container, false);
         // Inflate the layout for this fragment
+
+        locatingDevicesListView = (ListView) inputFragmentView.findViewById(R.id.locatingDevicesListView);
+
+        locatingDevicesListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Device clickedDevice = (Device) adapterView.getItemAtPosition(i);
+                        Intent intent = new Intent(getActivity().getApplicationContext(), DeviceActivity.class);
+                        intent.putExtra("id", clickedDevice.getId());
+                        startActivity(intent);
+                    }
+                }
+        );
+
+
+
+
+
         TextView temp = (TextView) inputFragmentView.findViewById(R.id.textView);
         temp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,7 +68,24 @@ public class LocatingFragment extends Fragment {
 
             }
         });
+
+
+        refreshAdapter();
         return inputFragmentView;
     }
 
+
+
+
+    private void refreshAdapter() {
+        locatingDevicesListView.setAdapter(new ArrayAdapter<Device>(((DevicesActivity)getActivity()).getApplicationContext(), android.R.layout.simple_list_item_1, ((DevicesActivity)getActivity()).dbHandler.getDevicesArrayByType(2)) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                textView.setTextColor(Color.BLACK);
+                return view;
+            }
+        });
+    }
 }

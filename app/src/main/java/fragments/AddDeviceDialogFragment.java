@@ -46,7 +46,6 @@ public class AddDeviceDialogFragment extends DialogFragment {
                             ((DevicesActivity)getActivity()).dbHandler.addDevice(device);
                             Toast.makeText(getActivity().getApplicationContext(), "dodane urzadzenie lokalizowane", Toast.LENGTH_LONG).show();
                         } else { //dodajemy urządzenie lokalizujące
-
                             Device device = new Device(editTextPhoneNumber.getText().toString(), editTextDeviceName.getText().toString(), 2);
                             ((DevicesActivity)getActivity()).dbHandler.addDevice(device);
                             Toast.makeText(getActivity().getApplicationContext(), "dodane urzadzenie lokalizujace", Toast.LENGTH_LONG).show();

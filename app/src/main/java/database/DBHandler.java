@@ -49,6 +49,21 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        createRequestsTable(sqLiteDatabase);
+        createDevicesTables(sqLiteDatabase);
+    }
+
+    private void createDevicesTables(SQLiteDatabase sqLiteDatabase) {
+        String query = "CREATE TABLE " + TABLE_NAME_DEVICES + " ("
+                + DEVICE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DEVICE_NUMBER + " TEXT, "
+                + DEVICE_NAME + " TEXT, "
+                + DEVICE_TYPE + " INTEGER"
+                + ");";
+        sqLiteDatabase.execSQL(query);
+    }
+
+    private void createRequestsTable(SQLiteDatabase sqLiteDatabase) {
         String query = "CREATE TABLE " + TABLE_NAME_REQUESTS + " ("
                 + REQUEST_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + REQUEST_RECEIVER + " TEXT, "
@@ -60,14 +75,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 + "FOREIGN KEY(" + REQUEST_RECEIVER + ") REFERENCES " + TABLE_NAME_DEVICES + "(" + DEVICE_NUMBER + ")"
                 + ");";
         sqLiteDatabase.execSQL(query);
-
-        String query2 = "CREATE TABLE " + TABLE_NAME_DEVICES + " ("
-                + DEVICE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + DEVICE_NUMBER + " TEXT, "
-                + DEVICE_NAME + " TEXT, "
-                + DEVICE_TYPE + " INTEGER"
-                + ");";
-        sqLiteDatabase.execSQL(query2);
     }
 
     @Override
@@ -162,7 +169,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Device getDeviceById(int id) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        if (sqLiteDatabase== null) {System.out.println("gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");}
+        if (sqLiteDatabase == null) {
+            System.out.println("gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
+        }
         String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_ID + " = " + id;
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToFirst();
@@ -176,18 +185,50 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public Device[] getDevicesArray() {
-        Device[] tmp = new Device[getDevicesArrayList().size()];
+        Device[] tmp = new Device[getAllDevicesArrayList().size()];
 
         for (int i = 0; i < tmp.length; i++) {
-            tmp[i] = getDevicesArrayList().get(i);
+            tmp[i] = getAllDevicesArrayList().get(i);
         }
         return tmp;
     }
 
-    public ArrayList<Device> getDevicesArrayList() {
+    public ArrayList<Device> getAllDevicesArrayList() {
         ArrayList<Device> tmp = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE 1";
+
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Device device = new Device(
+                    cursor.getInt(cursor.getColumnIndex(DEVICE_ID)),
+                    cursor.getString(cursor.getColumnIndex(DEVICE_NUMBER)),
+                    cursor.getString(cursor.getColumnIndex(DEVICE_NAME)),
+                    cursor.getInt(cursor.getColumnIndex(DEVICE_TYPE))
+            );
+
+            tmp.add(device);
+            cursor.moveToNext();
+        }
+        return tmp;
+    }
+
+
+    public Device[] getDevicesArrayByType(int type) {
+        Device[] tmp = new Device[getDevicesArrayListByType(type).size()];
+
+        for (int i = 0; i < tmp.length; i++) {
+            tmp[i] = getDevicesArrayListByType(type).get(i);
+        }
+        return tmp;
+    }
+
+    public ArrayList<Device> getDevicesArrayListByType(int type) {
+        ArrayList<Device> tmp = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_TYPE + "=" + type + ";";
 
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToFirst();

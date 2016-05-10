@@ -44,7 +44,7 @@ public class Test extends AppCompatActivity {
         final Device device1 = new Device("5554", "lokalizowany1", 1);
         dbHandler.addDevice(device1);
 
-        Toast.makeText(getApplicationContext(), "liczba urzadzen: " + dbHandler.getDevicesArrayList().size(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "liczba urzadzen: " + dbHandler.getAllDevicesArrayList().size(), Toast.LENGTH_LONG).show();
         addRequestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
