@@ -66,9 +66,9 @@ public class HistoryActivity extends AppCompatActivity
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Device clickedDevice = (Device) adapterView.getItemAtPosition(i);
+                        String clickedDevice = (String) adapterView.getItemAtPosition(i);
                         Intent intent = new Intent(getApplicationContext(), DeviceHistoryActivity.class);
-                        intent.putExtra("id", clickedDevice.getId());
+                        intent.putExtra("name", clickedDevice.split("\n")[0]);
                         startActivity(intent);
                     }
                 }
@@ -109,7 +109,15 @@ public class HistoryActivity extends AppCompatActivity
     }
 
     private void refreshAdapter() {
-        devicesListView.setAdapter(new ArrayAdapter<Device>(getApplicationContext(), android.R.layout.simple_list_item_1, (dbHandler.getDevicesArray())) {
+        Device[] devices = dbHandler.getDevicesArray();
+        String[] showList = new String[devices.length];
+
+        for(int i = 0; i < devices.length; i++)
+        {
+            showList[i] = devices[i].getDeviceName() + "\n  Numer: " + devices[i].getPhoneNumber();
+        }
+
+        devicesListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, showList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);

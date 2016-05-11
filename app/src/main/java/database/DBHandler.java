@@ -143,6 +143,31 @@ public class DBHandler extends SQLiteOpenHelper {
         return tmp;
     }
 
+    public ArrayList<Request> getRequestsByDevice(String deviceName) {
+        ArrayList<Request> tmp = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME_REQUESTS + " JOIN " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_NAME + " = " + deviceName;
+
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Request request = new Request(
+                    cursor.getInt(cursor.getColumnIndex(REQUEST_ID)),
+                    cursor.getDouble(cursor.getColumnIndex(LATITUDE)),
+                    cursor.getDouble(cursor.getColumnIndex(LONGITUDE)),
+                    new Date(cursor.getLong(cursor.getColumnIndex(REQUEST_SEND_DATE))),
+                    new Date(cursor.getLong(cursor.getColumnIndex(REQUEST_RECEIVE_DATE))),
+                    new Date(cursor.getLong(cursor.getColumnIndex(REQUEST_LOCALIZATION_DATE))),
+                    cursor.getString(cursor.getColumnIndex(REQUEST_RECEIVER))
+            );
+            tmp.add(request);
+            cursor.moveToNext();
+        }
+        return tmp;
+    }
+
+
     // end - obsluga request
 
 
@@ -178,6 +203,23 @@ public class DBHandler extends SQLiteOpenHelper {
             System.out.println("gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
         }
         String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_ID + " = " + id;
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        cursor.moveToFirst();
+        Device device = new Device(
+                cursor.getInt(cursor.getColumnIndex(DEVICE_ID)),
+                cursor.getString(cursor.getColumnIndex(DEVICE_NUMBER)),
+                cursor.getString(cursor.getColumnIndex(DEVICE_NAME)),
+                cursor.getInt(cursor.getColumnIndex(DEVICE_TYPE))
+        );
+        return device;
+    }
+
+    public Device getDeviceByName(String name) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        if (sqLiteDatabase == null) {
+            System.out.println("gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
+        }
+        String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_NAME + " = " + name;
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToFirst();
         Device device = new Device(

@@ -1,17 +1,33 @@
 package activities;
+import database.DBHandler;
+import database.Device;
+import database.Request;
 
+import android.app.DownloadManager;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.locateandgetlocated.locategetlocated.R;
 
+import java.util.Date;
+
 public class DeviceHistoryActivity extends AppCompatActivity {
+
+    public ListView devicesListView;
+    public DBHandler dbHandler;
+    public String[] dates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,61 +35,50 @@ public class DeviceHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_device_history);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Samsung");
+        String deviceName = getIntent().getStringExtra("name");
 
-
+        setTitle(deviceName);
+        dbHandler = new DBHandler(this, null, null, 1);
 
         final Bundle data = new Bundle();
 
-        data.putString("nazwa", "Samsung");
-        data.putDoubleArray("szerokosc", new double[]{51.101741, 53.101741, 52.101741, 54.101741});
-        data.putDoubleArray("dlugosc", new double[] {17.052048, 17.042048, 17.052048, 16.052048});
-        data.putStringArray("data", new String[]{"12-01-2016", "05-03-2016", "06-03-2016", "12-04-2016"});
-        data.putStringArray("godzina", new String[]{"21:25", "22:13", "13:12", "04:11"});
+        data.putString("nazwa", deviceName);
+        Request[] requests = dbHandler.getRequestsArray();
+        double[] latitudes = new double[requests.length];
+        double[] longitudes = new double[requests.length];
+        dates = new String[requests.length];
+        String[] times = new String[requests.length];
 
-        TextView temp1 = (TextView) findViewById(R.id.textView);
-        temp1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                data.putInt("indeks", 0);
-                intent.putExtras(data);
-                startActivity(intent);
-            }
-        });
 
-        TextView temp2 = (TextView) findViewById(R.id.textView1);
-        temp2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                data.putInt("indeks", 1);
-                intent.putExtras(data);
-                startActivity(intent);
-            }
-        });
+        for(int i = 0; i < requests.length; i++)
+        {
+            latitudes[i] = requests[i].getLatitude();
+            longitudes[i] = requests[i].getLongitude();
+            dates[i] = requests[i].getLocalizationDate().toString();
+            times[i] = requests[i].getLocalizationDate().getHours() + ":" + requests[i].getLocalizationDate().getMinutes();
+        }
 
-        TextView temp3 = (TextView) findViewById(R.id.textView2);
-        temp3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                data.putInt("indeks", 2);
-                intent.putExtras(data);
-                startActivity(intent);
-            }
-        });
+        data.putDoubleArray("szerokosc", longitudes);
+        data.putDoubleArray("dlugosc", latitudes);
+        data.putStringArray("data", dates);
+        data.putStringArray("godzina", times);
 
-        TextView temp4 = (TextView) findViewById(R.id.textView3);
-        temp4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                data.putInt("indeks", 3);
-                intent.putExtras(data);
-                startActivity(intent);
-            }
-        });
+
+        devicesListView = (ListView) findViewById(R.id.listView2);
+
+        devicesListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                        intent.putExtras(data);
+                        startActivity(intent);
+                    }
+                }
+        );
+
+
+        refreshAdapter();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +89,18 @@ public class DeviceHistoryActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void refreshAdapter() {
+        devicesListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, dates) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                textView.setTextColor(Color.BLACK);
+                return view;
+            }
+        });
     }
 
 }
