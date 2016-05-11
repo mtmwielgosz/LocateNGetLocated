@@ -12,46 +12,20 @@
     tools:context="activities.LocalizationActivity"
     tools:showIn="@layout/app_bar_localization">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView3" >
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-            <TextView
+            <ListView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Podaj number: "
-                android:id="@+id/textView2" />
-
-            <Space
-                android:layout_width="20px"
-                android:layout_height="20px" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:ems="10"
-                android:id="@+id/editText" />
-
+                android:layout_height="531dp"
+                android:id="@+id/listView3" />
         </LinearLayout>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Zlokalizuj"
-            android:id="@+id/button" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="test"
-            android:id="@+id/testButton" />
-
-    </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

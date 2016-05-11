@@ -1,6 +1,7 @@
 package activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -11,17 +12,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.locateandgetlocated.locategetlocated.R;
 
+import database.DBHandler;
+import database.Device;
+import database.Request;
 import database.Test;
 import sms.SMSSender;
 
 public class LocalizationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public ListView devicesListView;
+    public DBHandler dbHandler;
+    Request[] requests;
+    String[] toShow;
 
     @Override
     protected void onStart() { //Zmiana wybranej pozycji w menu głównym
@@ -45,27 +59,38 @@ public class LocalizationActivity extends AppCompatActivity
         setTitle(R.string.title_activity_localization);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        Button localize = (Button) findViewById(R.id.button);
-        final EditText phoneNr = (EditText) findViewById(R.id.editText);
-        //  final String intPhoneNr = phoneNr.getText().toString();
-        final SMSSender send = new SMSSender();
-        localize.setOnClickListener(new View.OnClickListener() {
+
+        dbHandler = new DBHandler(this, null, null, 1);
+        devicesListView = (ListView) findViewById(R.id.listView3);
+        requests = dbHandler.getRequestsArray();
+        toShow = dbHandler.getRequestsWithDevicesArray("'%'");
+
+        devicesListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        String clickedDevice = (String) adapterView.getItemAtPosition(i);
+                        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                        String deviceName = clickedDevice.split("\n")[1].substring(12);
+                        intent.putExtra("name", deviceName);
+                        intent.putExtra("id", requests[i].getId());
+                        startActivity(intent);
+                    }
+                }
+        );
+
+        refreshAdapter();
+    }
+
+
+    private void refreshAdapter() {
+        devicesListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, toShow) {
             @Override
-            public void onClick(View v) {
-
-                String intPhoneNr = phoneNr.getText().toString();
-
-                Toast.makeText(getApplicationContext(), intPhoneNr + " ", Toast.LENGTH_LONG).show();
-                //send.sendRequest(intPhoneNr, "#h#");
-            }
-        });
-
-        Button testButton = (Button)findViewById(R.id.testButton);
-        testButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Test.class);
-                startActivity(intent);
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                textView.setTextColor(Color.BLACK);
+                return view;
             }
         });
     }

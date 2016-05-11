@@ -27,7 +27,7 @@ public class DeviceHistoryActivity extends AppCompatActivity {
 
     public ListView devicesListView;
     public DBHandler dbHandler;
-    public String[] dates;
+    public String[] toShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,34 +35,24 @@ public class DeviceHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_device_history);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        String deviceName = getIntent().getStringExtra("name");
+        final String deviceName = getIntent().getStringExtra("name");
 
         setTitle(deviceName);
         dbHandler = new DBHandler(this, null, null, 1);
 
-        final Bundle data = new Bundle();
-
-        data.putString("nazwa", deviceName);
-        Request[] requests = dbHandler.getRequestsArray();
-        double[] latitudes = new double[requests.length];
-        double[] longitudes = new double[requests.length];
-        dates = new String[requests.length];
+        final Request[] requests = dbHandler.getRequestsArrayByDevice(deviceName);
+        String[] dates = new String[requests.length];
         String[] times = new String[requests.length];
+        String[] toShow = new String[requests.length];
 
 
         for(int i = 0; i < requests.length; i++)
         {
-            latitudes[i] = requests[i].getLatitude();
-            longitudes[i] = requests[i].getLongitude();
             dates[i] = requests[i].getLocalizationDate().toString();
             times[i] = requests[i].getLocalizationDate().getHours() + ":" + requests[i].getLocalizationDate().getMinutes();
+            toShow[i] = dates[i] + " " + times[i];
+
         }
-
-        data.putDoubleArray("szerokosc", longitudes);
-        data.putDoubleArray("dlugosc", latitudes);
-        data.putStringArray("data", dates);
-        data.putStringArray("godzina", times);
-
 
         devicesListView = (ListView) findViewById(R.id.listView2);
 
@@ -71,7 +61,8 @@ public class DeviceHistoryActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                        intent.putExtras(data);
+                        intent.putExtra("name", deviceName);
+                        intent.putExtra("id", requests[i].getId());
                         startActivity(intent);
                     }
                 }
@@ -92,7 +83,7 @@ public class DeviceHistoryActivity extends AppCompatActivity {
     }
 
     private void refreshAdapter() {
-        devicesListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, dates) {
+        devicesListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, toShow == null ? new String[] {} : toShow) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);

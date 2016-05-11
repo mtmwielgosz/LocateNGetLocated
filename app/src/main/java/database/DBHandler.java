@@ -119,6 +119,15 @@ public class DBHandler extends SQLiteOpenHelper {
         return tmp;
     }
 
+    public Request[] getRequestsArrayByDevice(String deviceName) {
+        Request[] tmp = new Request[getRequestsByDevice(deviceName).size()];
+
+        for (int i = 0; i < tmp.length; i++) {
+            tmp[i] = getRequestsByDevice(deviceName).get(i);
+        }
+        return tmp;
+    }
+
     public ArrayList<Request> getRequestsArrayList() {
         ArrayList<Request> tmp = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
@@ -146,7 +155,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<Request> getRequestsByDevice(String deviceName) {
         ArrayList<Request> tmp = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_NAME_REQUESTS + " JOIN " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_NAME + " = " + deviceName;
+        String query = "SELECT * FROM " + TABLE_NAME_REQUESTS + " JOIN " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_NAME + " = \'" + deviceName + "\'";
 
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToFirst();
@@ -298,4 +307,33 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     // end - obsluga device
+
+    public String[] getRequestsWithDevicesArray(String deviceName) {
+        String[] tmp = new String[getRequestsWithDevices(deviceName).size()];
+
+        for (int i = 0; i < tmp.length; i++) {
+            tmp[i] = getRequestsWithDevices(deviceName).get(i);
+        }
+        return tmp;
+    }
+
+    public ArrayList<String> getRequestsWithDevices(String deviceName) {
+        ArrayList<String> tmp = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME_REQUESTS + " JOIN " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_NAME + " = \'" + deviceName + "\'";
+
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            String line =  "Zapytanie: " + cursor.getInt(cursor.getColumnIndex(REQUEST_ID)) + "\n" +
+                    "  Urządzenie: " + cursor.getString(cursor.getColumnIndex(DEVICE_NAME)) + "\n" +
+                    "    Zlokalizowano: " +  (new Date(cursor.getLong(cursor.getColumnIndex(REQUEST_LOCALIZATION_DATE)))).toString();
+
+            tmp.add(line);
+            cursor.moveToNext();
+        }
+        return tmp;
+    }
+
 }
