@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.locateandgetlocated.locategetlocated.R;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import database.Device;
 
@@ -54,13 +55,16 @@ public class CustomAdapter extends BaseAdapter {
             deviceViewHolder = (DeviceViewHolder) view.getTag();
         }
 
-        deviceViewHolder.largeText = (TextView) view.findViewById(R.id.largeTextView);
-        deviceViewHolder.largeText.setText(devicesList.get(position).getDeviceName());
-
-        deviceViewHolder.smallText = (TextView) view.findViewById(R.id.smallTextView);
-        deviceViewHolder.smallText.setText(devicesList.get(position).getPhoneNumber());
+        deviceViewHolder.largeText = detail(view, R.id.largeTextView, devicesList.get(position).getDeviceName());
+        deviceViewHolder.smallText = detail(view, R.id.smallTextView, devicesList.get(position).getPhoneNumber());
 
         return view;
+    }
+
+    private TextView detail(View view, int resId, String text){
+        TextView textView = (TextView) view.findViewById(resId);
+        textView.setText(text);
+        return textView;
     }
 
     private class DeviceViewHolder{

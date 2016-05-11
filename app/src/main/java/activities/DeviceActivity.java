@@ -15,11 +15,15 @@ import android.widget.Toast;
 
 import com.locateandgetlocated.locategetlocated.R;
 
+import java.util.Date;
+
 import database.DBHandler;
 import database.Device;
+import database.Request;
 import fragments.AddDeviceDialogFragment;
 import fragments.DeleteDeviceDialogFragment;
 import fragments.EditDeviceDialogFragment;
+import sms.SMSSender;
 
 public class DeviceActivity extends AppCompatActivity {
     public int deviceId;
@@ -60,7 +64,10 @@ public class DeviceActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                SMSSender smsSender = new SMSSender();
+                Request request = new Request(new Date(), phoneNumber);
+                smsSender.sendRequest(request, "#h#");
+                Snackbar.make(view, "Wyslano zapytanie o lokalizacje", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

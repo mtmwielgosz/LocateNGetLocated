@@ -59,7 +59,7 @@ public class LocalizedFragment extends Fragment {
                     }
                 }
         );
-        Context context = getActivity().getApplicationContext();//((DevicesActivity) getActivity()).getApplicationContext();
+        Context context = getActivity().getApplicationContext();
         devices = ((DevicesActivity) getActivity()).dbHandler.getDevicesArrayListByType(1);
         customAdapter = new CustomAdapter(context, devices);
         adapterSingleton.setLocalizedCustomAdapter(customAdapter);
