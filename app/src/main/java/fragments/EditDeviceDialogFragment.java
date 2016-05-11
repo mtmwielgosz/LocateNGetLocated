@@ -14,14 +14,18 @@ import com.locateandgetlocated.locategetlocated.R;
 
 import activities.DeviceActivity;
 import activities.DevicesActivity;
+import database.DBHandler;
 import database.Device;
 
 /**
  * Created by Krzysztof on 26.04.2016.
  */
 public class EditDeviceDialogFragment extends DialogFragment {
+    DBHandler dbHandler;
+    final AdapterSingleton adapterSingleton = AdapterSingleton.getmInstance();
     EditText editTextDeviceName;
     EditText editTextPhoneNumber;
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -29,6 +33,7 @@ public class EditDeviceDialogFragment extends DialogFragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View alertFragmentView = inflater.inflate(R.layout.dialog_add_edit_device, null);
+        dbHandler = ((DeviceActivity)getActivity()).dbHandler;
         editTextDeviceName = (EditText)alertFragmentView.findViewById(R.id.editTextDeviceName);
         editTextPhoneNumber = (EditText)alertFragmentView.findViewById(R.id.editTextPhoneNumber);
         editTextDeviceName.setText(((DeviceActivity)getActivity()).deviceName);
@@ -41,7 +46,12 @@ public class EditDeviceDialogFragment extends DialogFragment {
                         int deviceId = ((DeviceActivity)getActivity()).deviceId;
                         String deviceName = editTextDeviceName.getText().toString();
                         String phoneNumber = editTextPhoneNumber.getText().toString();
+                        int deviceType = ((DeviceActivity)getActivity()).deviceType;
+                        Device device = new Device(deviceId, phoneNumber, deviceName, deviceType);
+                        dbHandler.updateDevice(device);
+                        adapterSingleton.notifyCustomAdapters();
                         // TODO Edycja danych urządzenia w bazie
+
                         Toast.makeText(getActivity().getApplicationContext(), "Edytowano dane urządzenia", Toast.LENGTH_LONG).show();
                     }
                 })

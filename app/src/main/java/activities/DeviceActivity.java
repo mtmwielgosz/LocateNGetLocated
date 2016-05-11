@@ -25,6 +25,7 @@ public class DeviceActivity extends AppCompatActivity {
     public int deviceId;
     public String deviceName;
     public String phoneNumber;
+    public int deviceType;
     public DBHandler dbHandler;
 
     @Override
@@ -45,6 +46,7 @@ public class DeviceActivity extends AppCompatActivity {
         //Tymczasowy kod
         deviceName = device.getDeviceName();
         phoneNumber = device.getPhoneNumber();
+        deviceType = device.getDeviceType();
         //
         setContentView(R.layout.activity_device);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
