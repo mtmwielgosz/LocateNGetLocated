@@ -21,18 +21,11 @@
         <RadioGroup
             android:id="@+id/radioGroupWidoki"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="#80000000"
+            android:background="#fcfcfc"
             android:padding="4dp" >
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="Normalny"
-                android:id="@+id/buttonNormalny" />
-
             <View
                 android:id="@+id/VerticalLine"
                 android:layout_width="1dip"
@@ -40,15 +33,11 @@
                 android:background="#aaa" />
 
 
-
-
-            <Button
-                style="?android:attr/buttonStyleSmall"
-
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text="Teren"
-                android:id="@+id/buttonTeren" />
+            <View
+                android:id="@+id/VerticalLine"
+                android:layout_width="1dip"
+                android:layout_height="match_parent"
+                android:background="#aaa" />
 
             <View
                 android:id="@+id/VerticalLine"
@@ -56,55 +45,41 @@
                 android:layout_height="match_parent"
                 android:background="#aaa" />
 
-            <Button
-                android:layout_width="98dp"
-                android:layout_height="wrap_content"
-                android:text="Satelita"
-                android:id="@+id/buttonSatelita" />
+            <Spinner
+                android:layout_width="121dp"
+                android:layout_height="51dp"
+                android:id="@+id/mapViewMode"
+                android:spinnerMode="dropdown" />
 
-            <View
-                android:id="@+id/VerticalLine"
-                android:layout_width="1dip"
-                android:layout_height="match_parent"
-                android:background="#aaa" />
-
-
-            <Button
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/buttonLokalizacjaUrzadzenia"
-                android:text="Urządzenie" />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Medium Text"
+                    android:id="@+id/dataTB"
+                    android:textSize="22dp"
+                    android:textAlignment="center"
+                    android:textColor="#423d3d"
+                    android:textIsSelectable="false"
+                    android:layout_gravity="right" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Small Text"
+                    android:id="@+id/counter"
+                    android:textAlignment="center"
+                    android:layout_gravity="right" />
+            </LinearLayout>
+
 
         </RadioGroup>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:background="#505050">
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="30dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
-                android:id="@+id/dataTB"
-                android:textSize="22dp"
-                android:textAlignment="center"
-                android:textColor="#423d3d"
-                android:background="#f7f7f7"
-                android:textIsSelectable="false" />
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
-                android:id="@+id/counter"
-                android:textAlignment="center"
-                android:background="#f7f7f7" />
-
-        </LinearLayout>
 
         <HorizontalScrollView
             android:layout_width="match_parent"

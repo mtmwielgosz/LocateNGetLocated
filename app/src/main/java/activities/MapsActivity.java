@@ -5,9 +5,12 @@ import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,27 +25,27 @@ import extra.RangeSliderView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
+import extra.SpinnerActivity;
 import localization.Place;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private String device_name="SAMSUNG";
-
+    private Spinner mapViewSpinner;
+    private Place lastPosition;
     private int current_indeks=22;
     private Button button_Normal;
     private Button button_Hybrid;
     private Button button_Terrain;
-    private Button button_DeviceLocation;
     private Button button_nextLocations;
     private Button button_prevLocations;
     private TextView dataTB;
     private TextView counter;
     private CameraPosition cameraPosition;
-    private GoogleMap mMap;
+    static private GoogleMap mMap;
     private RangeSliderView timeline;
-   // private Map<String, Place> placesTMP = new HashMap<String, Place>();
-  //  private TextView data;
     Place[] locations;
     private List<Place> currentPlaces  = new ArrayList<Place>(); ;
     private HorizontalScrollView timelineSV;
@@ -71,15 +74,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     buttonCurrentFocusIndex =z;
                     dateButtons[z].setBackgroundColor(Color.rgb(0, 0, 0));
                     setCurrentPosition(locations[z].getCoordinates(), locations[z].getDate(), locations[z].getHour());
-
-
-
                 }
 
             });
 
         }
-
         timelineSV.post(new Runnable() {
             public void run() {
                 timelineSV.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
@@ -98,37 +97,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         counter = (TextView) findViewById(R.id.counter);
         dataTB = (TextView) findViewById(R.id.dataTB);
-        button_Normal = (Button) findViewById(R.id.buttonNormalny);
-        button_Hybrid = (Button) findViewById(R.id.buttonSatelita);
-        button_Terrain = (Button) findViewById(R.id.buttonTeren);
-        button_DeviceLocation = (Button) findViewById(R.id.buttonLokalizacjaUrzadzenia);
+        mapViewSpinner = (Spinner) findViewById(R.id.mapViewMode);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.mapViewsArray, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        mapViewSpinner.setAdapter(adapter);
+        mapViewSpinner.setOnItemSelectedListener(new SpinnerActivity());
         setPlacesTMP();
         createTimeline();
-
-        button_DeviceLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setOnLocation(v);
-            }
-        });
-        button_Normal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setOnSatelite(v);
-            }
-        });
-        button_Terrain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setOnTerrain(v);
-            }
-        });
-        button_Hybrid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setOnMixed(v);
-            }
-        });
     }
 
 
@@ -136,15 +114,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        Bundle pos = getIntent().getExtras();
-      /*  if(!pos.isEmpty()){
+      /*  Bundle pos = getIntent().getExtras();
+       if(!pos.isEmpty()){
             latitude = pos.getDouble("szerokosc");
             longitude = pos.getDouble("dlugosc");
             date = pos.getString("data");
             device_name = pos.getString("nazwa");
-            hour = pos.getString("godzina");}*/
-
-        /* NEW BUNDLE*/
+            hour = pos.getString("godzina");}
+         NEW BUNDLE
 
 // odbieranie danych z bundle
         if(!pos.isEmpty()){
@@ -152,14 +129,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
            // locations = (Place[])we.readObject();
           //  device_name = pos.getString("nazwa");
            // current_indeks = pos.getInt("godzina");
-        }
-
+        }*/
       //  mMap.addMarker(new MarkerOptions().position(locations[locations.length-1].getCoordinates()).title(device_name).snippet(locations[locations.length-1].getHour() + " - " + locations[locations.length-1].getDate()));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
         //dataTB.setText(current_indeks + 1 + "/" + locations.length + "\n" + locations[current_indeks].getHour() + " - " + locations[current_indeks].getDate());
-        setCurrentPosition(locations[locations.length -1].getCoordinates(), locations[locations.length -1].getDate(), locations[locations.length -1].getHour());
+        setCurrentPosition(locations[locations.length - 1].getCoordinates(), locations[locations.length - 1].getDate(), locations[locations.length - 1].getHour());
     }
 
     public void setOnMixed(View view)
@@ -169,30 +145,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void setCurrentPosition(LatLng p, String d, String h){
         dataTB.setText(device_name);
-        counter.setText((buttonCurrentFocusIndex + 1) + "/" + locations.length );
+        counter.setText((buttonCurrentFocusIndex + 1) + "/" + locations.length);
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(p).title(device_name).snippet(h+ " " + d));
-        button_DeviceLocation.setText(device_name);
+        mMap.addMarker(new MarkerOptions().position(p).title(device_name).snippet(h + " " + d));
+
+        //Example values of min & max latlng values
+        if(lastPosition==null){
+            lastPosition=new Place(new LatLng(p.latitude,p.longitude),d,h);
+        }
+        else {
+            mMap.addMarker(new MarkerOptions().position(lastPosition.getCoordinates()).title(device_name).snippet(lastPosition.getHour() + " " + lastPosition.getDate()));
+        }
+
+        double latitudeAVG = (p.latitude + lastPosition.getCoordinates().latitude)/2;
+        double longitudeAVG =   (p.longitude + lastPosition.getCoordinates().longitude)/2;
+
+
         cameraPosition = new CameraPosition.Builder()
-                .target(p)      // Sets the center of the map to Mountain View
-                .zoom(13)                   // Sets the zoom
+                .target(new LatLng(latitudeAVG, longitudeAVG))// Sets the center of the map to Mountain View
+                .zoom(8)                   // Sets the zoom
                 .build();                   // Creates a CameraPosition from the builder
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-
+      //  lastPosition=new Place(new LatLng(p.latitude,p.longitude),d,h);
     }
 
     public void setOnSatelite(View view)
     {
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-
     }
 
     public void setOnTerrain(View view)
     {
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-
     }
 
     public void setOnLocation(View view)
@@ -200,67 +184,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMyLocationEnabled(true);
         Location myLocation = mMap.getMyLocation();
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-
     }
 
     public void setPlacesTMP(){
+        Random rand = new Random();
       locations=new Place[22];
         for(int i =0; i<locations.length; i++){
-            locations[i]=new Place(new LatLng(51.10828596112606 + i,17.05601692199707 +i),(i+10)+".05.2016","10:"+(i+10));
+            locations[i]=new Place(new LatLng(51.10828596112606 + rand.nextDouble(),17.05601692199707 + rand.nextDouble()),(i+10)+".05.2016","10:"+(i+10));
        }
-
-
-
-       /* placesTMP.put("0",new Place(new LatLng(51.10828596112606,17.05601692199707),"12.04.2016","10:23"));
-        placesTMP.put("1",new Place(new LatLng(51.11284832391172,17.06634520785883),"12.04.2016", "13:22"));
-        placesTMP.put("2",new Place(new LatLng(51.109399649873446,17.101707451511174),"12.04.2016", "15:03"));
-        placesTMP.put("3",new Place(new LatLng(51.12828596112606,17.02601692199707),"12.04.2016","19:57"));
-        placesTMP.put("4",new Place(new LatLng(51.10487287463323,17.034759514499456),"13.04.2016","9:23"));
-        placesTMP.put("5",new Place(new LatLng(51.07942846371363,16.969528191257268),"13.04.2016","9:45"));
-        placesTMP.put("6",new Place(new LatLng(51.08633002645643,16.989097588229924),"13.04.2016","22:16"));
-        placesTMP.put("7",new Place(new LatLng(51.10268836779975,17.032299038255587),"14.04.2016","9:44"));
-        placesTMP.put("8", new Place(new LatLng(51.10828596112606, 17.05601692199707), "14.04.2016", "13:32"));
-      //  placesTMP.put("9", new Place(new LatLng(51.10279615840873, 17.042770382249728), "14.04.2016", "14:10"));*/
-
-
-
     }
 
-    public void setOtherLocations(int currentLocation){
-        currentPlaces.clear();
 
-        if(locations.length>0){
-            if(currentLocation != locations.length -1 ){
-                //liczba lokacji które są na lewo/prawo od aktualnie wybranej
-                int currentRight = locations.length -1 - currentLocation;
-                int  currentLeft = currentLocation;
-
-
-                // przechowuje aktualnie przerabiany indeks
-               int i=0;
-                if(currentLeft>0){
-                //kopiowanie do tymczasowej tablicy lokacji z lewej strony
-                    for(i= 0; i<currentLeft && i<4; i++){
-                        currentPlaces.add(i, locations[currentLeft-4+i]);
-                    }
-                //wstawienie do tymczasowej tablicy aktualnej lokacji
-                i++;}
-                    currentPlaces.add(i,locations[currentLeft]);
-                i++;
-                if(currentRight>0) {
-                    //kopiowanie do tymczasowej tablicy lokacji z prawej strony
-                    for (int j = i; j < i + currentRight + 1 && j < locations.length - i; j++) {
-                        currentPlaces.add(j,locations[i + currentRight - 4 + j]);
-                    }
-                }
-
-                }
-
-            }
-
-
-        }
 
     }
 
