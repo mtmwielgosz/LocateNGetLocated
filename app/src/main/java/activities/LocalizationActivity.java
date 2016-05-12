@@ -77,6 +77,7 @@ public class LocalizationActivity extends AppCompatActivity
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Request clickedRequest = requests[i];
                         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                        String deviceName = clickedRequest.receiver;
                         intent.putExtra("name", deviceName);
                         intent.putExtra("id", requests[i].id);
                         startActivity(intent);
