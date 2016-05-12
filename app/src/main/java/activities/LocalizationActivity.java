@@ -63,15 +63,20 @@ public class LocalizationActivity extends AppCompatActivity
         dbHandler = new DBHandler(this, null, null, 1);
         devicesListView = (ListView) findViewById(R.id.listView3);
         requests = dbHandler.getRequestsArray();
-        toShow = dbHandler.getRequestsWithDevicesArray("'%'");
+  //      toShow = dbHandler.getRequestsWithDevicesArray("'%'");
+        toShow = new String[requests.length];
+        for(int i = 0; i < requests.length; i++)
+        {
+            toShow[i] = requests[i].id + " Szerokość: " + requests[i].latitude + ", Długość: " + requests[i].longitude + ", Telefon: " + requests[i].receiver;
+        }
+
 
         devicesListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        String clickedDevice = (String) adapterView.getItemAtPosition(i);
+                        Request clickedRequest = requests[i];
                         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                        String deviceName = clickedDevice.split("\n")[1].substring(12);
                         intent.putExtra("name", deviceName);
                         intent.putExtra("id", requests[i].id);
                         startActivity(intent);

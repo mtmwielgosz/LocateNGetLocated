@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -115,6 +117,8 @@ public class DBHandler extends SQLiteOpenHelper {
                         "%s = '%f' " +
                         "WHERE %s=%d",
                 TABLE_NAME_REQUESTS, REQUEST_LOCALIZATION_DATE, request.localizationDate.getTime(), LATITUDE, request.latitude, LONGITUDE, request.longitude, REQUEST_SEND_DATE, request.sendDate.getTime());
+        Log.d("SELEEECT", query);
+
         db.execSQL(query);
     }
 
@@ -146,6 +150,8 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME_REQUESTS + " WHERE 1";
 
+        Log.d("SELEEECT", query);
+
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToFirst();
 
@@ -168,7 +174,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<Request> getRequestsByDevice(String deviceName) {
         ArrayList<Request> tmp = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_NAME_REQUESTS + " JOIN " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_NAME + " = \'" + deviceName + "\'";
+        String query = "SELECT * FROM " + TABLE_NAME_REQUESTS + " JOIN " + TABLE_NAME_DEVICES + " ON " + TABLE_NAME_REQUESTS + "." + REQUEST_RECEIVER + " = " + TABLE_NAME_DEVICES + "." + DEVICE_NUMBER
+                + " WHERE " + DEVICE_NAME + " = \'" + deviceName + "\'";
+
+        Log.d("SELEEECT", query);
 
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToFirst();
@@ -208,6 +217,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void updateDevice(Device device) {
         SQLiteDatabase db = getWritableDatabase();
         String query = String.format("UPDATE %s SET %s = '%s', %s = '%s' WHERE %s=%d", TABLE_NAME_DEVICES, DEVICE_NAME, device.getDeviceName(), DEVICE_NUMBER, device.getPhoneNumber(), DEVICE_ID, device.getId());
+        Log.d("SELEEECT", query);
         db.execSQL(query);
     }
 
@@ -226,7 +236,10 @@ public class DBHandler extends SQLiteOpenHelper {
         if (sqLiteDatabase == null) {
             System.out.println("gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
         }
-        String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_ID + " = " + id;
+        String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_ID + " = \'" + id + "\'";
+
+        Log.d("SELEEECT", query);
+
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToFirst();
         Device device = new Device(
@@ -243,7 +256,8 @@ public class DBHandler extends SQLiteOpenHelper {
         if (sqLiteDatabase == null) {
             System.out.println("gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
         }
-        String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_NAME + " = " + name;
+        String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_NAME + " = \'" + name + "\'";
+        Log.d("SELEEECT", query);
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToFirst();
         Device device = new Device(
@@ -268,6 +282,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ArrayList<Device> tmp = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE 1";
+        Log.d("SELEEECT", query);
 
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToFirst();
@@ -299,7 +314,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<Device> getDevicesArrayListByType(int type) {
         ArrayList<Device> tmp = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_TYPE + "=" + type + ";";
+        String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_TYPE + "=\'" + type + "\'";
+        Log.d("SELEEECT", query);
 
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToFirst();
@@ -334,6 +350,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ArrayList<String> tmp = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME_REQUESTS + " JOIN " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_NAME + " = \'" + deviceName + "\'";
+        Log.d("SELEEECT", query);
 
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         cursor.moveToFirst();

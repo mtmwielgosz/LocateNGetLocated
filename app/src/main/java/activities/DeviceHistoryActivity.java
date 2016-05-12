@@ -43,7 +43,7 @@ public class DeviceHistoryActivity extends AppCompatActivity {
         final Request[] requests = dbHandler.getRequestsArrayByDevice(deviceName);
         String[] dates = new String[requests.length];
         String[] times = new String[requests.length];
-        String[] toShow = new String[requests.length];
+        toShow = new String[requests.length];
 
 
         for(int i = 0; i < requests.length; i++)
@@ -83,7 +83,7 @@ public class DeviceHistoryActivity extends AppCompatActivity {
     }
 
     private void refreshAdapter() {
-        devicesListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, toShow == null ? new String[] {} : toShow) {
+        devicesListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, toShow) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
