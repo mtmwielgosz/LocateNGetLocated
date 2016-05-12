@@ -18,7 +18,7 @@ public class SMSSender {
 
     public void sendRequest(Request request, String message){
         smsManager=SmsManager.getDefault();
-        smsManager.sendTextMessage(request.getReceiver(), null, message, null, null);
+        smsManager.sendTextMessage(request.receiver, null, message, null, null);
     }
 
 }

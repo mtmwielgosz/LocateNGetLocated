@@ -66,7 +66,8 @@ public class DeviceActivity extends AppCompatActivity {
             public void onClick(View view) {
                 SMSSender smsSender = new SMSSender();
                 Request request = new Request(new Date(), phoneNumber);
-                smsSender.sendRequest(request, "#h#");
+                dbHandler.addRequest(request);
+                smsSender.sendRequest(request, "#h#"+ (new Date()).getTime());
                 Snackbar.make(view, "Wyslano zapytanie o lokalizacje", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }

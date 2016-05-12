@@ -73,7 +73,7 @@ public class LocalizationActivity extends AppCompatActivity
                         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                         String deviceName = clickedDevice.split("\n")[1].substring(12);
                         intent.putExtra("name", deviceName);
-                        intent.putExtra("id", requests[i].getId());
+                        intent.putExtra("id", requests[i].id);
                         startActivity(intent);
                     }
                 }

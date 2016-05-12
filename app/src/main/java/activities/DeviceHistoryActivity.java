@@ -48,8 +48,8 @@ public class DeviceHistoryActivity extends AppCompatActivity {
 
         for(int i = 0; i < requests.length; i++)
         {
-            dates[i] = requests[i].getLocalizationDate().toString();
-            times[i] = requests[i].getLocalizationDate().getHours() + ":" + requests[i].getLocalizationDate().getMinutes();
+            dates[i] = requests[i].localizationDate.toString();
+            times[i] = requests[i].localizationDate.getHours() + ":" + requests[i].localizationDate.getMinutes();
             toShow[i] = dates[i] + " " + times[i];
 
         }
@@ -62,7 +62,7 @@ public class DeviceHistoryActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                         intent.putExtra("name", deviceName);
-                        intent.putExtra("id", requests[i].getId());
+                        intent.putExtra("id", requests[i].id);
                         startActivity(intent);
                     }
                 }

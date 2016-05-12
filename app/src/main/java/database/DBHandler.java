@@ -88,21 +88,34 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void addRequest(Request request) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(REQUEST_SEND_DATE, request.getSendDate().getTime());
+        contentValues.put(REQUEST_SEND_DATE, request.sendDate.getTime());
 
-        if (request.getReceiveDate() != null) {
-            contentValues.put(REQUEST_RECEIVE_DATE, request.getReceiveDate().getTime());
+        if (request.receiveDate != null) {
+            contentValues.put(REQUEST_RECEIVE_DATE, request.receiveDate.getTime());
         }
-        if (request.getLocalizationDate() != null) {
-            contentValues.put(REQUEST_LOCALIZATION_DATE, request.getLocalizationDate().getTime());
+        if (request.localizationDate != null) {
+            contentValues.put(REQUEST_LOCALIZATION_DATE, request.localizationDate.getTime());
         }
-        contentValues.put(LATITUDE, String.valueOf(request.getLatitude()));
-        contentValues.put(LONGITUDE, String.valueOf(request.getLongitude()));
-        contentValues.put(REQUEST_RECEIVER, String.valueOf(request.getReceiver()));
+        contentValues.put(LATITUDE, String.valueOf(request.latitude));
+        contentValues.put(LONGITUDE, String.valueOf(request.longitude));
+        contentValues.put(REQUEST_RECEIVER, String.valueOf(request.receiver));
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_NAME_REQUESTS, null, contentValues);
         db.close();
+    }
+
+
+    public void updateRequest(Request request) {
+        SQLiteDatabase db = getWritableDatabase();
+        String query = String.format(
+                "UPDATE %s " +
+                        "SET %s = '%d', " +
+                        "%s = '%f', " +
+                        "%s = '%f' " +
+                        "WHERE %s=%d",
+                TABLE_NAME_REQUESTS, REQUEST_LOCALIZATION_DATE, request.localizationDate.getTime(), LATITUDE, request.latitude, LONGITUDE, request.longitude, REQUEST_SEND_DATE, request.sendDate.getTime());
+        db.execSQL(query);
     }
 
     public void deleteRequest(String requestId) {
