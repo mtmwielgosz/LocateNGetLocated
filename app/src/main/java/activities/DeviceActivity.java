@@ -31,6 +31,8 @@ public class DeviceActivity extends AppCompatActivity {
     public String phoneNumber;
     public int deviceType;
     public DBHandler dbHandler;
+    public TextView textViewDeviceName;
+    public TextView textViewPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +58,8 @@ public class DeviceActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setTitle("Dane urządzenia");
-        TextView textViewDeviceName = (TextView) findViewById(R.id.textViewDeviceName);
-        TextView textViewPhoneNumber = (TextView) findViewById(R.id.textViewPhoneNumber);
+        textViewDeviceName = (TextView) findViewById(R.id.textViewDeviceName);
+        textViewPhoneNumber = (TextView) findViewById(R.id.textViewPhoneNumber);
         textViewDeviceName.setText(deviceName);
         textViewPhoneNumber.setText(phoneNumber);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

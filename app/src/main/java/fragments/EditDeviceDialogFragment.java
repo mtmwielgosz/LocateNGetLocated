@@ -48,10 +48,12 @@ public class EditDeviceDialogFragment extends DialogFragment {
                         String phoneNumber = editTextPhoneNumber.getText().toString();
                         int deviceType = ((DeviceActivity)getActivity()).deviceType;
                         Device device = new Device(deviceId, phoneNumber, deviceName, deviceType);
+                        //Edycja danych urządzenia w bazie
                         dbHandler.updateDevice(device);
                         adapterSingleton.notifyCustomAdapters();
-                        // TODO Edycja danych urządzenia w bazie
-
+                        //odświeżenie widoku
+                        ((DeviceActivity)getActivity()).textViewDeviceName.setText(deviceName);
+                        ((DeviceActivity)getActivity()).textViewPhoneNumber.setText(phoneNumber);
                         Toast.makeText(getActivity().getApplicationContext(), "Edytowano dane urządzenia", Toast.LENGTH_LONG).show();
                     }
                 })
