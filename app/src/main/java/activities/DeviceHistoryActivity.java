@@ -36,6 +36,7 @@ public class DeviceHistoryActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final String deviceName = getIntent().getStringExtra("name");
+        final String deviceNumber = getIntent().getStringExtra("nr");
 
         setTitle(deviceName);
         dbHandler = new DBHandler(this, null, null, 1);
@@ -61,7 +62,7 @@ public class DeviceHistoryActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                        intent.putExtra("name", deviceName);
+                        intent.putExtra("name", deviceNumber);
                         intent.putExtra("id", requests[i].id);
                         startActivity(intent);
                     }

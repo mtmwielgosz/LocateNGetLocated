@@ -28,6 +28,8 @@ public class HistoryActivity extends AppCompatActivity
 
     public ListView devicesListView;
     public DBHandler dbHandler;
+    Device[] devices;
+    String[] showList;
 
     @Override
     protected void onStart() { //Zmiana wybranej pozycji w menu głównym
@@ -68,7 +70,8 @@ public class HistoryActivity extends AppCompatActivity
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         String clickedDevice = (String) adapterView.getItemAtPosition(i);
                         Intent intent = new Intent(getApplicationContext(), DeviceHistoryActivity.class);
-                        intent.putExtra("name", clickedDevice.split("\n")[0]);
+                        intent.putExtra("name", devices[i].getDeviceName());
+                        intent.putExtra("nr", devices[i].getPhoneNumber());
                         startActivity(intent);
                     }
                 }
@@ -109,8 +112,8 @@ public class HistoryActivity extends AppCompatActivity
     }
 
     private void refreshAdapter() {
-        Device[] devices = dbHandler.getDevicesArray();
-        String[] showList = new String[devices.length];
+        devices = dbHandler.getDevicesArray();
+        showList = new String[devices.length];
 
         for(int i = 0; i < devices.length; i++)
         {

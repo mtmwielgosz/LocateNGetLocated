@@ -4,8 +4,8 @@ import android.graphics.Color;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -21,18 +21,20 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.locateandgetlocated.locategetlocated.R;
+
+import database.DBHandler;
+import database.Request;
 import extra.RangeSliderView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import extra.SpinnerActivity;
 import localization.Place;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private String device_name="SAMSUNG";
+    private String device_number;
     private Spinner mapViewSpinner;
     private Place lastPosition;
     private int current_indeks=22;
@@ -52,9 +54,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LinearLayout timelineLayout;
     private Button[] dateButtons;
     private int buttonCurrentFocusIndex;
+    private DBHandler dbHandler;
 
     protected void createTimeline(){
-        buttonCurrentFocusIndex =locations.length-1;
+        buttonCurrentFocusIndex = locations.length - 1;
         timelineSV = (HorizontalScrollView ) findViewById(R.id.timelineSV);
         dateButtons=new Button[locations.length];
         timelineLayout = (LinearLayout) findViewById(R.id.timelineLayout);
@@ -95,6 +98,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
+        device_number = getIntent().getStringExtra("name");
         counter = (TextView) findViewById(R.id.counter);
         dataTB = (TextView) findViewById(R.id.dataTB);
         mapViewSpinner = (Spinner) findViewById(R.id.mapViewMode);
@@ -119,7 +124,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             latitude = pos.getDouble("szerokosc");
             longitude = pos.getDouble("dlugosc");
             date = pos.getString("data");
-            device_name = pos.getString("nazwa");
+            device_number = pos.getString("nazwa");
             hour = pos.getString("godzina");}
          NEW BUNDLE
 
@@ -127,10 +132,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(!pos.isEmpty()){
            // ObjectInputStream we = new ObjectInputStream(new FileInputStream("pracownik.dat"));
            // locations = (Place[])we.readObject();
-          //  device_name = pos.getString("nazwa");
+          //  device_number = pos.getString("nazwa");
            // current_indeks = pos.getInt("godzina");
         }*/
-      //  mMap.addMarker(new MarkerOptions().position(locations[locations.length-1].getCoordinates()).title(device_name).snippet(locations[locations.length-1].getHour() + " - " + locations[locations.length-1].getDate()));
+      //  mMap.addMarker(new MarkerOptions().position(locations[locations.length-1].getCoordinates()).title(device_number).snippet(locations[locations.length-1].getHour() + " - " + locations[locations.length-1].getDate()));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
@@ -144,17 +149,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void setCurrentPosition(LatLng p, String d, String h){
-        dataTB.setText(device_name);
+        dataTB.setText(device_number);
         counter.setText((buttonCurrentFocusIndex + 1) + "/" + locations.length);
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(p).title(device_name).snippet(h + " " + d));
+        mMap.addMarker(new MarkerOptions().position(p).title(device_number).snippet(h + " " + d));
 
         //Example values of min & max latlng values
         if(lastPosition==null){
             lastPosition=new Place(new LatLng(p.latitude,p.longitude),d,h);
         }
         else {
-            mMap.addMarker(new MarkerOptions().position(lastPosition.getCoordinates()).title(device_name).snippet(lastPosition.getHour() + " " + lastPosition.getDate()));
+            mMap.addMarker(new MarkerOptions().position(lastPosition.getCoordinates()).title(device_number).snippet(lastPosition.getHour() + " " + lastPosition.getDate()));
         }
 
         double latitudeAVG = (p.latitude + lastPosition.getCoordinates().latitude)/2;
@@ -187,12 +192,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void setPlacesTMP(){
-        Random rand = new Random();
-      locations=new Place[22];
-        for(int i =0; i<locations.length; i++){
-            locations[i]=new Place(new LatLng(51.10828596112606 + rand.nextDouble(),17.05601692199707 + rand.nextDouble()),(i+10)+".05.2016","10:"+(i+10));
-       }
+        dbHandler = new DBHandler(this, null, null, 1);
+        int reqestId = getIntent().getIntExtra("id", 1);
+        Request[] requests = dbHandler.getRequestsArray();
+        List<Place> places = new ArrayList<Place>();
+
+        for(int i = 0; i < requests.length; i++) {
+            Log.d("MIE_WCHODZI", requests[i].receiver + "==" + device_number);
+            if (requests[i].receiver.equals(device_number)) {
+                Log.d("WCHODZ", requests[i].receiver + "==" + device_number);
+
+//                locations[i]=new Place(new LatLng(51.10828596112606 + rand.nextDouble(),17.05601692199707 + rand.nextDouble()),(i+10)+".05.2016","10:"+(i+10));
+                places.add(new Place(new LatLng(requests[i].latitude, requests[i].longitude), requests[i].localizationDate.getDate() + "", requests[i].localizationDate.getTime() + ""));
+
+            }
+        }
+
+        locations = new Place[places.size()];
+        for(int i = 0; i < places.size(); i++)
+        {
+            locations[i] = places.get(i);
+        }
     }
+
+//    public void setPlacesTMP(){
+//        Random rand = new Random();
+//        locations = new Place[22];
+//        for(int i = 0; i < locations.length; i++){
+//                locations[i]=new Place(new LatLng(51.10828596112606 + rand.nextDouble(),17.05601692199707 + rand.nextDouble()),(i+10)+".05.2016","10:"+(i+10));
+//        }
+//    }
 
 
 
