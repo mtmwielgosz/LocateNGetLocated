@@ -1,7 +1,11 @@
 package activities;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -24,8 +29,8 @@ import com.locateandgetlocated.locategetlocated.R;
 
 import database.DBHandler;
 import database.Request;
-import extra.RangeSliderView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,61 +39,30 @@ import localization.Place;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private String device_number;
+    private String deviceNumber;
+    private String deviceName;
     private Spinner mapViewSpinner;
+    private LocationManager locationManager;
     private Place lastPosition;
     private int current_indeks=22;
-    private Button button_Normal;
-    private Button button_Hybrid;
-    private Button button_Terrain;
-    private Button button_nextLocations;
-    private Button button_prevLocations;
+    private Geocoder geoCoder = null;
     private TextView dataTB;
+    private TextView distanceTB;
     private TextView counter;
+    private TextView adressTB;
+    private TextView adressMediumTB;
     private CameraPosition cameraPosition;
     static private GoogleMap mMap;
-    private RangeSliderView timeline;
+
     Place[] locations;
     private List<Place> currentPlaces  = new ArrayList<Place>(); ;
     private HorizontalScrollView timelineSV;
     private LinearLayout timelineLayout;
     private Button[] dateButtons;
-    private int buttonCurrentFocusIndex;
+    private int selectedIndex;
     private DBHandler dbHandler;
 
-    protected void createTimeline(){
-        buttonCurrentFocusIndex = locations.length - 1;
-        timelineSV = (HorizontalScrollView ) findViewById(R.id.timelineSV);
-        dateButtons=new Button[locations.length];
-        timelineLayout = (LinearLayout) findViewById(R.id.timelineLayout);
 
-        for(int i=0; i<locations.length; i++){
-            final int z =i;
-           dateButtons[i] = new Button(this);
-            dateButtons[i].setText(locations[i].getHour() + "\n" + locations[i].getDate());
-            dateButtons[i].setTextColor(Color.rgb(255, 255, 255));
-            dateButtons[i].setBackgroundColor(Color.rgb(128, 128, 128));
-            dateButtons[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            timelineLayout.addView(dateButtons[i]);
-            dateButtons[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dateButtons[buttonCurrentFocusIndex].setBackgroundColor(Color.rgb(128, 128, 128));
-                    buttonCurrentFocusIndex =z;
-                    dateButtons[z].setBackgroundColor(Color.rgb(0, 0, 0));
-                    setCurrentPosition(locations[z].getCoordinates(), locations[z].getDate(), locations[z].getHour());
-                }
-
-            });
-
-        }
-        timelineSV.post(new Runnable() {
-            public void run() {
-                timelineSV.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-            }
-        });
-        dateButtons[buttonCurrentFocusIndex].setBackgroundColor(Color.rgb(0, 0, 0));        //timelineSV.scrollTo(0, timelineSV.getPaddingEnd());
-    }
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +73,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
 
-        device_number = getIntent().getStringExtra("name");
+        deviceNumber = getIntent().getStringExtra("name");
+        deviceName = getIntent().getStringExtra("deviceName");
         counter = (TextView) findViewById(R.id.counter);
         dataTB = (TextView) findViewById(R.id.dataTB);
+        adressTB = (TextView) findViewById(R.id.adressTB);
+        adressMediumTB = (TextView) findViewById(R.id.adressMediumTB);
+        distanceTB = (TextView) findViewById(R.id.distanceTB);
         mapViewSpinner = (Spinner) findViewById(R.id.mapViewMode);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.mapViewsArray, android.R.layout.simple_spinner_item);
@@ -112,54 +90,72 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapViewSpinner.setOnItemSelectedListener(new SpinnerActivity());
         setPlacesTMP();
         createTimeline();
+
+    }
+
+
+
+    public void setAdress(LatLng l){
+        List<Address> locations = null;
+        String adress = "";
+        geoCoder = new Geocoder(this);
+        try {
+            locations= geoCoder.getFromLocation(l.latitude,l.longitude,4);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for(int i=1; i<locations.get(0).getMaxAddressLineIndex()+1;i++ ){
+
+            adress = adress + locations.get(0).getAddressLine(i) + ", ";
+        }
+        adressTB.setText(adress);
+        adressMediumTB.setText(locations.get(0).getAddressLine(0) + "");
     }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-      /*  Bundle pos = getIntent().getExtras();
-       if(!pos.isEmpty()){
-            latitude = pos.getDouble("szerokosc");
-            longitude = pos.getDouble("dlugosc");
-            date = pos.getString("data");
-            device_number = pos.getString("nazwa");
-            hour = pos.getString("godzina");}
-         NEW BUNDLE
-
-// odbieranie danych z bundle
-        if(!pos.isEmpty()){
-           // ObjectInputStream we = new ObjectInputStream(new FileInputStream("pracownik.dat"));
-           // locations = (Place[])we.readObject();
-          //  device_number = pos.getString("nazwa");
-           // current_indeks = pos.getInt("godzina");
-        }*/
-      //  mMap.addMarker(new MarkerOptions().position(locations[locations.length-1].getCoordinates()).title(device_number).snippet(locations[locations.length-1].getHour() + " - " + locations[locations.length-1].getDate()));
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setMyLocationEnabled(true);
-        //dataTB.setText(current_indeks + 1 + "/" + locations.length + "\n" + locations[current_indeks].getHour() + " - " + locations[current_indeks].getDate());
-        setCurrentPosition(locations[locations.length - 1].getCoordinates(), locations[locations.length - 1].getDate(), locations[locations.length - 1].getHour());
+        setSelectedPosition(locations[locations.length - 1].getCoordinates(), locations[locations.length - 1].getDate(), locations[locations.length - 1].getHour());
     }
 
-    public void setOnMixed(View view)
-    {
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+    public float calculateDistance(LatLng loc1, LatLng loc2){
+        float[] results = new float[1];
+        Location.distanceBetween(loc1.latitude, loc1.longitude, loc2.latitude, loc2.longitude, results);
+        return results[0];
     }
 
-    public void setCurrentPosition(LatLng p, String d, String h){
-        dataTB.setText(device_number);
-        counter.setText((buttonCurrentFocusIndex + 1) + "/" + locations.length);
+
+
+    public LatLng getCurrentPosition(){
+        LatLng l = null;
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location lok = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(lok!=null) {
+            l = new LatLng(lok.getLatitude(), lok.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(l).title("Tu jesteś!").icon(BitmapDescriptorFactory.fromResource(R.drawable.pin1)));
+        }
+            return l;
+    }
+
+
+
+    public void setSelectedPosition(LatLng p, String d, String h){
+        dataTB.setText(deviceNumber);
+        counter.setText((selectedIndex + 1) + "/" + locations.length);
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(p).title(device_number).snippet(h + " " + d));
+        mMap.addMarker(new MarkerOptions().position(p).title(deviceNumber).snippet(h + " " + d));
 
         //Example values of min & max latlng values
         if(lastPosition==null){
             lastPosition=new Place(new LatLng(p.latitude,p.longitude),d,h);
         }
         else {
-            mMap.addMarker(new MarkerOptions().position(lastPosition.getCoordinates()).title(device_number).snippet(lastPosition.getHour() + " " + lastPosition.getDate()));
+            mMap.addMarker(new MarkerOptions().position(lastPosition.getCoordinates()).title(deviceNumber).snippet(lastPosition.getHour() + " " + lastPosition.getDate()));
         }
 
         double latitudeAVG = (p.latitude + lastPosition.getCoordinates().latitude)/2;
@@ -171,40 +167,58 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .zoom(8)                   // Sets the zoom
                 .build();                   // Creates a CameraPosition from the builder
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-      //  lastPosition=new Place(new LatLng(p.latitude,p.longitude),d,h);
+       setAdress(p);
+
+        int distance = 0;
+
+        if( getCurrentPosition()!=null){
+            distance = (int) calculateDistance(p, getCurrentPosition());
+        }
+       // float distance = calculateDistance(p, new LatLng(51.0, 17.0));
+        if(distance<1000) {
+            distanceTB.setText( distance + " m");
+        }else{
+            distanceTB.setText( distance/1000 + " km");
+        }
+
     }
+
+
+
 
     public void setOnSatelite(View view)
     {
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
     }
-
     public void setOnTerrain(View view)
     {
         mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
     }
-
-    public void setOnLocation(View view)
+    public void setOnMixed(View view)
     {
-        mMap.setMyLocationEnabled(true);
-        Location myLocation = mMap.getMyLocation();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
 
     public void setPlacesTMP(){
         dbHandler = new DBHandler(this, null, null, 1);
         int reqestId = getIntent().getIntExtra("id", 1);
+
+
         Request[] requests = dbHandler.getRequestsArray();
+
         List<Place> places = new ArrayList<Place>();
 
         for(int i = 0; i < requests.length; i++) {
-            Log.d("MIE_WCHODZI", requests[i].receiver + "==" + device_number);
-            if (requests[i].receiver.equals(device_number)) {
-                Log.d("WCHODZ", requests[i].receiver + "==" + device_number);
+            Log.d("NIE_WCHODZI", requests[i].receiver + "==" + deviceNumber);
+            if (requests[i].receiver.equals(deviceNumber)) {
+                Log.d("WCHODZ", requests[i].receiver + "==" + deviceNumber);
 
 //                locations[i]=new Place(new LatLng(51.10828596112606 + rand.nextDouble(),17.05601692199707 + rand.nextDouble()),(i+10)+".05.2016","10:"+(i+10));
-                places.add(new Place(new LatLng(requests[i].latitude, requests[i].longitude), requests[i].localizationDate.getDate() + "", requests[i].localizationDate.getTime() + ""));
+                places.add(new Place(new LatLng(requests[i].latitude, requests[i].longitude),new java.sql.Date(requests[i].localizationDate.getTime())+"", requests[i].localizationDate.getHours()+ ":" +requests[i].localizationDate.getMinutes() ));
 
+                if(reqestId==requests[i].id){
+                    selectedIndex = places.size()-1;
+                }
             }
         }
 
@@ -215,16 +229,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-//    public void setPlacesTMP(){
-//        Random rand = new Random();
-//        locations = new Place[22];
-//        for(int i = 0; i < locations.length; i++){
-//                locations[i]=new Place(new LatLng(51.10828596112606 + rand.nextDouble(),17.05601692199707 + rand.nextDouble()),(i+10)+".05.2016","10:"+(i+10));
-//        }
-//    }
+    protected void createTimeline(){
 
+        timelineSV = (HorizontalScrollView ) findViewById(R.id.timelineSV);
+        dateButtons=new Button[locations.length];
+        timelineLayout = (LinearLayout) findViewById(R.id.timelineLayout);
 
+        for(int i=0; i<locations.length; i++){
+            final int z =i;
+            dateButtons[i] = new Button(this);
+            dateButtons[i].setText(locations[i].getHour() + "\n" + locations[i].getDate());
+            dateButtons[i].setTextColor(Color.rgb(255, 255, 255));
+            dateButtons[i].setBackgroundColor(Color.rgb(128, 128, 128));
+            dateButtons[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            timelineLayout.addView(dateButtons[i]);
+            dateButtons[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dateButtons[selectedIndex].setBackgroundColor(Color.rgb(128, 128, 128));
+                    selectedIndex = z;
+                    dateButtons[z].setBackgroundColor(Color.rgb(0, 0, 0));
+                    setSelectedPosition(locations[z].getCoordinates(), locations[z].getDate(), locations[z].getHour());
+                }
 
+            });
+
+        }
+        timelineSV.post(new Runnable() {
+            public void run() {
+                timelineSV.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+            }
+        });
+        dateButtons[selectedIndex].setBackgroundColor(Color.rgb(0, 0, 0));        //timelineSV.scrollTo(0, timelineSV.getPaddingEnd());
+    }
     }
 
 

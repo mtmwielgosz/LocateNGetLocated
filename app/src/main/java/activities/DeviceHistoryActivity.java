@@ -63,6 +63,7 @@ public class DeviceHistoryActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                         intent.putExtra("name", deviceNumber);
+                        intent.putExtra("deviceName", deviceName);
                         intent.putExtra("id", requests[i].id);
                         startActivity(intent);
                     }
