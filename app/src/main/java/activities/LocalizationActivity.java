@@ -23,19 +23,22 @@ import android.widget.Toast;
 
 import com.locateandgetlocated.locategetlocated.R;
 
+import java.util.ArrayList;
+
 import database.DBHandler;
 import database.Device;
 import database.Request;
 import database.Test;
+import fragments.CustomRequestAdapter;
 import sms.SMSSender;
 
 public class LocalizationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public ListView devicesListView;
+    private CustomRequestAdapter customRequestAdapter;
     public DBHandler dbHandler;
-    Request[] requests;
-    String[] toShow;
+    private ArrayList<Request> requestArrayList;
 
     @Override
     protected void onStart() { //Zmiana wybranej pozycji w menu głównym
@@ -62,43 +65,30 @@ public class LocalizationActivity extends AppCompatActivity
 
         dbHandler = new DBHandler(this, null, null, 1);
         devicesListView = (ListView) findViewById(R.id.listView3);
-        requests = dbHandler.getRequestsArray();
-  //      toShow = dbHandler.getRequestsWithDevicesArray("'%'");
-        toShow = new String[requests.length];
-        for(int i = 0; i < requests.length; i++)
-        {
-            toShow[i] = requests[i].id + " Szerokość: " + requests[i].latitude + ", Długość: " + requests[i].longitude + ", Telefon: " + requests[i].receiver;
-        }
+        requestArrayList = dbHandler.getRequestsArrayList();
+        customRequestAdapter = new CustomRequestAdapter(getApplicationContext(), requestArrayList);
+
+        devicesListView.setAdapter(customRequestAdapter);
+
+
+        //      toShow = dbHandler.getRequestsWithDevicesArray("'%'");
 
 
         devicesListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Request clickedRequest = requests[i];
+                        Request clickedRequest = requestArrayList.get(i);
                         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                         String deviceName = clickedRequest.receiver;
                         intent.putExtra("name", deviceName);
-                        intent.putExtra("id", requests[i].id);
+                        intent.putExtra("id", requestArrayList.get(i).id);
                         startActivity(intent);
                     }
                 }
         );
 
-        refreshAdapter();
-    }
 
-
-    private void refreshAdapter() {
-        devicesListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, toShow) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView textView = (TextView) view.findViewById(android.R.id.text1);
-                textView.setTextColor(Color.BLACK);
-                return view;
-            }
-        });
     }
 
     @Override
