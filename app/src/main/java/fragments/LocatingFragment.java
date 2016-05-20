@@ -2,21 +2,26 @@ package fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.locateandgetlocated.locategetlocated.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 import activities.DeviceActivity;
 import activities.DevicesActivity;
-import adapters.DevicesAdapter;
 import database.Device;
 
 /**
@@ -24,10 +29,10 @@ import database.Device;
  */
 public class LocatingFragment extends Fragment {
 
-    public ListView locatingDevicesListView;
-    DevicesAdapter devicesAdapter;
+    ListView locatingDevicesListView;
+    CustomAdapter customAdapter;
     final AdapterSingleton adapterSingleton = AdapterSingleton.getmInstance();
-    public ArrayList<Device> devices;
+    ArrayList<Device> devices;
 
     public LocatingFragment() {
         // Required empty public constructor
@@ -58,11 +63,11 @@ public class LocatingFragment extends Fragment {
 
         Context context = getActivity().getApplicationContext();//((DevicesActivity) getActivity()).getApplicationContext();
         devices = ((DevicesActivity) getActivity()).dbHandler.getDevicesArrayListByType(2);
-        devicesAdapter = new DevicesAdapter(context, devices);
-        adapterSingleton.setLocatingCustomAdapter(devicesAdapter);
+        customAdapter = new CustomAdapter(context, devices);
+        adapterSingleton.setLocatingCustomAdapter(customAdapter);
         adapterSingleton.setLocatingDevices(devices);
         adapterSingleton.setDbHandler(((DevicesActivity) getActivity()).dbHandler);
-        locatingDevicesListView.setAdapter(devicesAdapter);
+        locatingDevicesListView.setAdapter(customAdapter);
         return inputFragmentView;
     }
 }

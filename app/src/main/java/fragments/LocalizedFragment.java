@@ -2,13 +2,17 @@ package fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.test.SingleLaunchActivityTestCase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.locateandgetlocated.locategetlocated.R;
 
@@ -16,7 +20,6 @@ import java.util.ArrayList;
 
 import activities.DeviceActivity;
 import activities.DevicesActivity;
-import adapters.DevicesAdapter;
 import database.Device;
 
 /**
@@ -24,10 +27,10 @@ import database.Device;
  */
 public class LocalizedFragment extends Fragment {
 
-    public ListView localizedDevicesListView;
-    public DevicesAdapter devicesAdapter;
+    ListView localizedDevicesListView;
+    CustomAdapter customAdapter;
     final AdapterSingleton adapterSingleton = AdapterSingleton.getmInstance();
-    public ArrayList<Device> devices;
+    ArrayList<Device> devices;
 
     public LocalizedFragment() {
         // Required empty public constructor
@@ -58,11 +61,11 @@ public class LocalizedFragment extends Fragment {
         );
         Context context = getActivity().getApplicationContext();
         devices = ((DevicesActivity) getActivity()).dbHandler.getDevicesArrayListByType(1);
-        devicesAdapter = new DevicesAdapter(context, devices);
-        adapterSingleton.setLocalizedCustomAdapter(devicesAdapter);
+        customAdapter = new CustomAdapter(context, devices);
+        adapterSingleton.setLocalizedCustomAdapter(customAdapter);
         adapterSingleton.setLocalizedDevices(devices);
         adapterSingleton.setDbHandler(((DevicesActivity) getActivity()).dbHandler);
-        localizedDevicesListView.setAdapter(devicesAdapter);
+        localizedDevicesListView.setAdapter(customAdapter);
         return inputFragmentView;
     }
 }
