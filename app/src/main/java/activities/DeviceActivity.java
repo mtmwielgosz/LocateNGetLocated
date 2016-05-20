@@ -50,9 +50,9 @@ public class DeviceActivity extends AppCompatActivity {
 
         Toast.makeText(getApplicationContext(), " "+deviceId, Toast.LENGTH_LONG).show();
         //Tymczasowy kod
-        deviceName = device.getDeviceName();
-        phoneNumber = device.getPhoneNumber();
-        deviceType = device.getDeviceType();
+        deviceName = device.deviceName;
+        phoneNumber = device.phoneNumber;
+        deviceType = device.deviceType;
         //
         setContentView(R.layout.activity_device);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
