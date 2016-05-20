@@ -34,7 +34,7 @@ public class Request {
 
     public Request(Date sendDate, Device device){
         this.sendDate = sendDate;
-        this.receiver = device.getPhoneNumber();
+        this.receiver = device.phoneNumber;
     }
 
 //    public int getId() {

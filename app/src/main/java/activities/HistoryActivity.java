@@ -71,8 +71,8 @@ public class HistoryActivity extends AppCompatActivity
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         String clickedDevice = (String) adapterView.getItemAtPosition(i);
                         Intent intent = new Intent(getApplicationContext(), DeviceHistoryActivity.class);
-                        intent.putExtra("name", deviceArrayList.get(i).getDeviceName());
-                        intent.putExtra("nr", deviceArrayList.get(i).getPhoneNumber());
+                        intent.putExtra("name", deviceArrayList.get(i).deviceName);
+                        intent.putExtra("nr", deviceArrayList.get(i).phoneNumber);
                         startActivity(intent);
                     }
                 }

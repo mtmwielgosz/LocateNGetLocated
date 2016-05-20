@@ -205,9 +205,9 @@ public class DBHandler extends SQLiteOpenHelper {
     // obsluga device
     public void addDevice(Device device) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DEVICE_NAME, device.getDeviceName());
-        contentValues.put(DEVICE_NUMBER, device.getPhoneNumber());
-        contentValues.put(DEVICE_TYPE, device.getDeviceType());
+        contentValues.put(DEVICE_NAME, device.deviceName);
+        contentValues.put(DEVICE_NUMBER, device.phoneNumber);
+        contentValues.put(DEVICE_TYPE, device.deviceType);
 
         SQLiteDatabase db = getWritableDatabase();
         db.insert(TABLE_NAME_DEVICES, null, contentValues);
@@ -216,7 +216,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void updateDevice(Device device) {
         SQLiteDatabase db = getWritableDatabase();
-        String query = String.format("UPDATE %s SET %s = '%s', %s = '%s' WHERE %s=%d", TABLE_NAME_DEVICES, DEVICE_NAME, device.getDeviceName(), DEVICE_NUMBER, device.getPhoneNumber(), DEVICE_ID, device.getId());
+        String query = String.format("UPDATE %s SET %s = '%s', %s = '%s' WHERE %s=%d", TABLE_NAME_DEVICES, DEVICE_NAME, device.deviceName, DEVICE_NUMBER, device.phoneNumber, DEVICE_ID, device.id);
         Log.d("SELEEECT", query);
         db.execSQL(query);
     }

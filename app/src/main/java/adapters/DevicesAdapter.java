@@ -1,4 +1,4 @@
-package fragments;
+package adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,12 +17,12 @@ import database.Device;
 /**
  * Created by kamil on 2016-05-10.
  */
-public class CustomAdapter extends BaseAdapter {
+public class DevicesAdapter extends BaseAdapter {
     ArrayList<Device> devicesList = new ArrayList<>();
     LayoutInflater layoutInflater;
     Context context;
 
-    public CustomAdapter(Context context, ArrayList<Device> devicesList){
+    public DevicesAdapter(Context context, ArrayList<Device> devicesList){
         this.context=context;
         this.devicesList = devicesList;
         layoutInflater = LayoutInflater.from(this.context);
@@ -48,15 +48,15 @@ public class CustomAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         DeviceViewHolder deviceViewHolder;
         if (view ==null){
-            view = layoutInflater.inflate(R.layout.custom_row, null);
+            view = layoutInflater.inflate(R.layout.adapter_devices, null);
             deviceViewHolder = new DeviceViewHolder();
             view.setTag(deviceViewHolder);
         }else {
             deviceViewHolder = (DeviceViewHolder) view.getTag();
         }
 
-        deviceViewHolder.largeText = detail(view, R.id.largeTextView, devicesList.get(position).getDeviceName());
-        deviceViewHolder.smallText = detail(view, R.id.smallTextView, devicesList.get(position).getPhoneNumber());
+        deviceViewHolder.largeText = detail(view, R.id.largeTextView, devicesList.get(position).deviceName);
+        deviceViewHolder.smallText = detail(view, R.id.smallTextView, devicesList.get(position).phoneNumber);
 
         return view;
     }

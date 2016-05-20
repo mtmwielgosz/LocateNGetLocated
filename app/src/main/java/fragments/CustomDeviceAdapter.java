@@ -54,8 +54,8 @@ public class CustomDeviceAdapter extends BaseAdapter {
             deviceViewHolder = (DeviceViewHolder) view.getTag();
         }
 
-        deviceViewHolder.largeText = detail(view, R.id.largeTextView, devicesList.get(position).getDeviceName());
-        deviceViewHolder.smallText = detail(view, R.id.smallTextView, devicesList.get(position).getPhoneNumber());
+        deviceViewHolder.largeText = detail(view, R.id.largeTextView, devicesList.get(position).deviceName);
+        deviceViewHolder.smallText = detail(view, R.id.smallTextView, devicesList.get(position).phoneNumber);
 
         return view;
     }

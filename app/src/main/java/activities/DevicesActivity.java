@@ -1,11 +1,13 @@
 package activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,13 +17,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.app.SearchManager;
 
+import adapters.DevicesAdapter;
 import database.DBHandler;
+import database.Device;
 import fragments.AddDeviceDialogFragment;
 import fragments.LocalizedFragment;
 import fragments.LocatingFragment;
 
 import com.locateandgetlocated.locategetlocated.R;
+
+import java.util.ArrayList;
 
 import extra.ViewPagerAdapter;
 
@@ -97,6 +104,24 @@ public class DevicesActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.devices, menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false);
+        searchView.setQueryHint("Szukaj...");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterDevices(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterDevices(newText);
+                return false;
+            }
+        });
         return true;
     }
 
@@ -149,6 +174,26 @@ public class DevicesActivity extends AppCompatActivity
         adapter.addFragment(localizedFragment, "Lokalizowane");
         adapter.addFragment(locatingFragment, "Lokalizujące");
         viewPager.setAdapter(adapter);
+    }
+
+    private void filterDevices(String query) {
+        //Filtrowanie lokalizowanych
+        ArrayList<Device> localizedDevices = localizedFragment.devices;
+        ArrayList<Device> showedLocalizedDevices = new ArrayList<Device>();
+        for(Device device : localizedDevices) {
+            if(device.deviceName.toLowerCase().contains(query.toLowerCase()))
+                showedLocalizedDevices.add(device);
+        }
+        localizedFragment.localizedDevicesListView.setAdapter(new DevicesAdapter(getApplicationContext(), showedLocalizedDevices));
+
+        //Filtrowanie lokalizujących
+        ArrayList<Device> locatingDevices = locatingFragment.devices;
+        ArrayList<Device> showedLocatingDevices = new ArrayList<Device>();
+        for(Device device : locatingDevices) {
+            if(device.deviceName.toLowerCase().contains(query.toLowerCase()))
+                showedLocatingDevices.add(device);
+        }
+        locatingFragment.locatingDevicesListView.setAdapter(new DevicesAdapter(getApplicationContext(), showedLocatingDevices));
     }
 
 

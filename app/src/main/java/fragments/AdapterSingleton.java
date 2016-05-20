@@ -1,10 +1,8 @@
 package fragments;
 
-import android.content.Context;
-import android.widget.ArrayAdapter;
-
 import java.util.ArrayList;
 
+import adapters.DevicesAdapter;
 import database.DBHandler;
 import database.Device;
 
@@ -14,7 +12,7 @@ import database.Device;
 public class AdapterSingleton {
     private static AdapterSingleton mInstance = null;
     DBHandler dbHandler;
-    CustomAdapter[] customAdapters = new CustomAdapter[2];
+    DevicesAdapter[] devicesAdapters = new DevicesAdapter[2];
     ArrayList<Device> localizedDevices;
     ArrayList<Device> locatingDevices;
 
@@ -28,12 +26,12 @@ public class AdapterSingleton {
         return mInstance;
     }
 
-    public void setLocalizedCustomAdapter(CustomAdapter customAdapter) {
-        customAdapters[0] = customAdapter;
+    public void setLocalizedCustomAdapter(DevicesAdapter devicesAdapter) {
+        devicesAdapters[0] = devicesAdapter;
     }
 
-    public void setLocatingCustomAdapter(CustomAdapter customAdapter) {
-        customAdapters[1] = customAdapter;
+    public void setLocatingCustomAdapter(DevicesAdapter devicesAdapter) {
+        devicesAdapters[1] = devicesAdapter;
     }
 
     public void setLocalizedDevices(ArrayList<Device> localizedDevices) {
@@ -55,8 +53,8 @@ public class AdapterSingleton {
         locatingDevices.clear();
         locatingDevices.addAll(dbHandler.getDevicesArrayListByType(2));
 
-        for (int i = 0; i < customAdapters.length; i++) {
-            customAdapters[i].notifyDataSetChanged();
+        for (int i = 0; i < devicesAdapters.length; i++) {
+            devicesAdapters[i].notifyDataSetChanged();
         }
     }
 }

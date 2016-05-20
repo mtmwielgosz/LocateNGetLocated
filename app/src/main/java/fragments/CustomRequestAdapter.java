@@ -71,7 +71,7 @@ public class CustomRequestAdapter extends BaseAdapter {
         dbHandler = new DBHandler(context, null, null, 1);
         Device device = dbHandler.getDeviceByDeviceNumber(phoneNumber);
         TextView textView = (TextView) view.findViewById(resId);
-        textView.setText(device.getDeviceName());
+        textView.setText(device.deviceName);
         return textView;
     }
 
