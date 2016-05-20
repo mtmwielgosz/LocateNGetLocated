@@ -356,9 +356,9 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            String line =  "Zapytanie: " + cursor.getInt(cursor.getColumnIndex(REQUEST_ID)) + "\n" +
+            String line = "Zapytanie: " + cursor.getInt(cursor.getColumnIndex(REQUEST_ID)) + "\n" +
                     "  Urządzenie: " + cursor.getString(cursor.getColumnIndex(DEVICE_NAME)) + "\n" +
-                    "    Zlokalizowano: " +  (new Date(cursor.getLong(cursor.getColumnIndex(REQUEST_LOCALIZATION_DATE)))).toString();
+                    "    Zlokalizowano: " + (new Date(cursor.getLong(cursor.getColumnIndex(REQUEST_LOCALIZATION_DATE)))).toString();
 
             tmp.add(line);
             cursor.moveToNext();
@@ -366,4 +366,24 @@ public class DBHandler extends SQLiteOpenHelper {
         return tmp;
     }
 
+    public Device getDeviceByDeviceNumber(String phoneNumber) {
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        String query = String.format(
+                "Select * " +
+                        "FROM %s " +
+                        "WHERE %s = %s",
+                TABLE_NAME_DEVICES, DEVICE_NUMBER, phoneNumber);
+
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        Device device = new Device(
+                cursor.getInt(cursor.getColumnIndex(DEVICE_ID)),
+                cursor.getString(cursor.getColumnIndex(DEVICE_NUMBER)),
+                cursor.getString(cursor.getColumnIndex(DEVICE_NAME)),
+                cursor.getInt(cursor.getColumnIndex(DEVICE_TYPE))
+        );
+
+        return device;
+    }
 }
