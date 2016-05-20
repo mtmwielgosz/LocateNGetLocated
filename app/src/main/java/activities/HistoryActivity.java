@@ -20,16 +20,20 @@ import android.widget.TextView;
 
 import com.locateandgetlocated.locategetlocated.R;
 
+import java.util.ArrayList;
+
 import database.DBHandler;
 import database.Device;
+import fragments.CustomDeviceAdapter;
 
 public class HistoryActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public ListView devicesListView;
+    CustomDeviceAdapter customDeviceAdapter;
+    private ArrayList<Device> deviceArrayList;
     public DBHandler dbHandler;
-    Device[] devices;
-    String[] showList;
+
 
     @Override
     protected void onStart() { //Zmiana wybranej pozycji w menu głównym
@@ -37,6 +41,7 @@ public class HistoryActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(1).setChecked(true);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,18 +56,14 @@ public class HistoryActivity extends AppCompatActivity
         toggle.syncState();
 
 
-//        TextView temp = (TextView) findViewById(R.id.textView);
-//        temp.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getApplicationContext(), DeviceHistoryActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
-
         devicesListView = (ListView) findViewById(R.id.listView);
         dbHandler = new DBHandler(this, null, null, 1);
+
+        deviceArrayList = dbHandler.getAllDevicesArrayList();
+
+        customDeviceAdapter = new CustomDeviceAdapter(getApplicationContext(), deviceArrayList);
+
+        devicesListView.setAdapter(customDeviceAdapter);
 
         devicesListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
@@ -70,15 +71,14 @@ public class HistoryActivity extends AppCompatActivity
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         String clickedDevice = (String) adapterView.getItemAtPosition(i);
                         Intent intent = new Intent(getApplicationContext(), DeviceHistoryActivity.class);
-                        intent.putExtra("name", devices[i].getDeviceName());
-                        intent.putExtra("nr", devices[i].getPhoneNumber());
+                        intent.putExtra("name", deviceArrayList.get(i).getDeviceName());
+                        intent.putExtra("nr", deviceArrayList.get(i).getPhoneNumber());
                         startActivity(intent);
                     }
                 }
         );
 
 
-        refreshAdapter();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -111,25 +111,6 @@ public class HistoryActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void refreshAdapter() {
-        devices = dbHandler.getDevicesArray();
-        showList = new String[devices.length];
-
-        for(int i = 0; i < devices.length; i++)
-        {
-            showList[i] = devices[i].getDeviceName() + "\n  Numer: " + devices[i].getPhoneNumber();
-        }
-
-        devicesListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, showList) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView textView = (TextView) view.findViewById(android.R.id.text1);
-                textView.setTextColor(Color.BLACK);
-                return view;
-            }
-        });
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
