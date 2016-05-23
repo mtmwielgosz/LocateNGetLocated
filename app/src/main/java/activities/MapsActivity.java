@@ -105,12 +105,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
 
-        for(int i=1; i<locations.get(0).getMaxAddressLineIndex()+1;i++ ){
+        if(locations.size() > 0) {
+            for (int i = 1; i < locations.get(0).getMaxAddressLineIndex() + 1; i++) {
 
-            adress = adress + locations.get(0).getAddressLine(i) + ", ";
+                adress = adress + locations.get(0).getAddressLine(i) + ", ";
+            }
+            adressTB.setText(adress);
+            adressMediumTB.setText(locations.get(0).getAddressLine(0) + "");
         }
-        adressTB.setText(adress);
-        adressMediumTB.setText(locations.get(0).getAddressLine(0) + "");
     }
 
 
