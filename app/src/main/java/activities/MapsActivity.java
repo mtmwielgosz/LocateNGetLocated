@@ -31,6 +31,7 @@ import database.DBHandler;
 import database.Request;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +72,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
         deviceNumber = getIntent().getStringExtra("name");
         deviceName = getIntent().getStringExtra("deviceName");
@@ -139,7 +139,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Location lok = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if(lok!=null) {
             l = new LatLng(lok.getLatitude(), lok.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(l).title("Tu jesteś!").icon(BitmapDescriptorFactory.fromResource(R.drawable.pin1)));
+           // mMap.addMarker(new MarkerOptions().position(l).title("Tu jesteś!").icon(BitmapDescriptorFactory.fromResource(R.drawable.pin1)));
+            mMap.addMarker(new MarkerOptions().position(l).title("Tu jesteś!").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
         }
             return l;
     }
@@ -152,7 +153,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(p).title(deviceNumber).snippet(h + " " + d));
 
-        //Example values of min & max latlng values
         if(lastPosition==null){
             lastPosition=new Place(new LatLng(p.latitude,p.longitude),d,h);
         }
@@ -163,15 +163,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double latitudeAVG = (p.latitude + lastPosition.getCoordinates().latitude)/2;
         double longitudeAVG =   (p.longitude + lastPosition.getCoordinates().longitude)/2;
 
+        int distance =  ((int) calculateDistance(p,locations[locations.length-1].getCoordinates()))/1000;
+
 
         cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(latitudeAVG, longitudeAVG))// Sets the center of the map to Mountain View
-                .zoom(8)                   // Sets the zoom
+                .zoom(distance/200)                   // Sets the zoom
                 .build();                   // Creates a CameraPosition from the builder
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
        setAdress(p);
 
-        int distance = 0;
+        distance = 0;
 
         if( getCurrentPosition()!=null){
             distance = (int) calculateDistance(p, getCurrentPosition());
@@ -203,6 +205,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void setPlacesTMP(){
         dbHandler = new DBHandler(this, null, null, 1);
+        //dbHandler.addRequest(new Request(10,53.1,17.3,null,null,null,"k"));
         int reqestId = getIntent().getIntExtra("id", 1);
 
 
@@ -212,7 +215,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         for(int i = 0; i < requests.length; i++) {
             Log.d("NIE_WCHODZI", requests[i].receiver + "==" + deviceNumber);
-            if (requests[i].receiver.equals(deviceNumber)) {
+            if (requests[i].receiver.equals(deviceNumber) && requests[i].localizationDate!=null) {
                 Log.d("WCHODZ", requests[i].receiver + "==" + deviceNumber);
 
 //                locations[i]=new Place(new LatLng(51.10828596112606 + rand.nextDouble(),17.05601692199707 + rand.nextDouble()),(i+10)+".05.2016","10:"+(i+10));
