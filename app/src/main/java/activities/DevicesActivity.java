@@ -30,7 +30,7 @@ import com.locateandgetlocated.locategetlocated.R;
 
 import java.util.ArrayList;
 
-import extra.ViewPagerAdapter;
+import adapters.ViewPagerAdapter;
 
 public class DevicesActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import activities.DeviceActivity;
 import activities.DevicesActivity;
+import adapters.AdapterSingleton;
 import adapters.DevicesAdapter;
 import database.Device;
 

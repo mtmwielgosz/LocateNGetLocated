@@ -1,7 +1,6 @@
 package activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -12,11 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.locateandgetlocated.locategetlocated.R;
 
@@ -24,7 +20,7 @@ import java.util.ArrayList;
 
 import database.DBHandler;
 import database.Device;
-import fragments.CustomDeviceAdapter;
+import adapters.CustomDeviceAdapter;
 
 public class HistoryActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
