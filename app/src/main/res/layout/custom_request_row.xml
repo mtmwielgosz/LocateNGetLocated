@@ -1,47 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="88dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
-    <ImageView
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="88dp"
+        android:gravity="center_vertical"
+        android:id="@+id/linearLayout">
 
-    <TextView
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="device name"
+            android:id="@+id/deviceName"
+            android:textColor="#000000"
+            android:alpha="0.87" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="latitude"
+            android:id="@+id/latitudeTextView"
+            android:textColor="#000000"
+            android:alpha="0.87" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="longitude"
+            android:id="@+id/longitudeTextView"
+            android:textColor="#000000"
+            android:alpha="0.87" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="device name"
-        android:id="@+id/deviceName"
-        android:textColor="#000000"
-        android:layout_below="@+id/latitudeTextView"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="latitude"
-        android:id="@+id/latitudeTextView"
-        android:layout_below="@+id/largeTextView"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:textColor="#000000" />
+        android:gravity="center">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="longitude"
-        android:id="@+id/longitudeTextView"
-        android:textColor="#000000"
-        android:layout_alignBottom="@+id/deviceName"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="10.21"
+            android:textColor="#000000"
+            android:alpha="0.54"
+            android:id="@+id/textView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="14.10.2015"
+            android:id="@+id/textView2"
+            android:textColor="#000000"
+            android:alpha="0.54"
+            android:layout_alignTop="@+id/textView"
+             />
+    </LinearLayout>
 
 </RelativeLayout>
