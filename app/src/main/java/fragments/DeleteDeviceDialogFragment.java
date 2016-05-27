@@ -5,16 +5,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.locateandgetlocated.locategetlocated.R;
-
 import activities.DeviceActivity;
-import activities.DevicesActivity;
-import database.Device;
+import adapters.AdapterSingleton;
 
 /**
  * Created by Krzysztof on 26.04.2016.

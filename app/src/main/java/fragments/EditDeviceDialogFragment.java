@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.locateandgetlocated.locategetlocated.R;
 
 import activities.DeviceActivity;
-import activities.DevicesActivity;
+import adapters.AdapterSingleton;
 import database.DBHandler;
 import database.Device;
 

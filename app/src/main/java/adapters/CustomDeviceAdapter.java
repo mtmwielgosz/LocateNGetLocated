@@ -1,4 +1,4 @@
-package fragments;
+package adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -21,12 +21,11 @@ public class CustomDeviceAdapter extends BaseAdapter {
     LayoutInflater layoutInflater;
     Context context;
 
-    public CustomDeviceAdapter(Context context, ArrayList<Device> devicesList){
-        this.context=context;
+    public CustomDeviceAdapter(Context context, ArrayList<Device> devicesList) {
+        this.context = context;
         this.devicesList = devicesList;
         layoutInflater = LayoutInflater.from(this.context);
     }
-
 
     @Override
     public int getCount() {
@@ -46,11 +45,11 @@ public class CustomDeviceAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
         DeviceViewHolder deviceViewHolder;
-        if (view ==null){
+        if (view == null) {
             view = layoutInflater.inflate(R.layout.custom_device_row, null);
             deviceViewHolder = new DeviceViewHolder();
             view.setTag(deviceViewHolder);
-        }else {
+        } else {
             deviceViewHolder = (DeviceViewHolder) view.getTag();
         }
 
@@ -60,13 +59,13 @@ public class CustomDeviceAdapter extends BaseAdapter {
         return view;
     }
 
-    private TextView detail(View view, int resId, String text){
+    private TextView detail(View view, int resId, String text) {
         TextView textView = (TextView) view.findViewById(resId);
         textView.setText(text);
         return textView;
     }
 
-    private class DeviceViewHolder{
+    private class DeviceViewHolder {
         TextView largeText, smallText;
     }
 }

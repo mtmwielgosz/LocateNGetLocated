@@ -1,8 +1,7 @@
-package fragments;
+package adapters;
 
 import java.util.ArrayList;
 
-import adapters.DevicesAdapter;
 import database.DBHandler;
 import database.Device;
 
