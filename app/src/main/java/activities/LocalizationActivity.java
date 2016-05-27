@@ -19,6 +19,7 @@ import com.locateandgetlocated.locategetlocated.R;
 import java.util.ArrayList;
 
 import database.DBHandler;
+import database.Device;
 import database.Request;
 import adapters.CustomRequestAdapter;
 
@@ -70,9 +71,10 @@ public class LocalizationActivity extends AppCompatActivity
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Request clickedRequest = requestArrayList.get(i);
                         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                        String deviceName = clickedRequest.receiver;
-                        intent.putExtra("name", deviceName);
-                        intent.putExtra("nr", deviceName);
+                        String deviceNumber = clickedRequest.receiver;
+                        intent.putExtra("deviceNumber", deviceNumber);
+                        Device device = dbHandler.getDeviceByDeviceNumber(deviceNumber);
+                        intent.putExtra("deviceName", device.deviceName);
                         intent.putExtra("id", requestArrayList.get(i).id);
                         startActivity(intent);
                     }

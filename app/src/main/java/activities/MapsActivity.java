@@ -91,7 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     public void initializeInterface(){
-        deviceNumber = getIntent().getStringExtra("name");
+        deviceNumber = getIntent().getStringExtra("deviceNumber");
         deviceName = getIntent().getStringExtra("deviceName");
         counter = (TextView) findViewById(R.id.counter);
         dataTB = (TextView) findViewById(R.id.dataTB);
@@ -115,7 +115,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
 
-        if(locations.size() > 0) {
+        if(locations != null && locations.size() > 0) {
             for (int i = 1; i < locations.get(0).getMaxAddressLineIndex() + 1; i++) {
 
                 adress = adress + locations.get(0).getAddressLine(i) + ", ";
@@ -151,17 +151,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             l = new LatLng(lok.getLatitude(), lok.getLongitude());
             mMap.addMarker(new MarkerOptions().position(l).title("Tu jesteś!").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
         }
-            return l;
+        return l;
     }
 
 
     public void setSelectedPosition(LatLng p, String d, String h){
-        dataTB.setText(deviceNumber);
+        dataTB.setText(deviceName);
         counter.setText((selectedIndex + 1) + "/" + locations.length);
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(p).title(deviceNumber).snippet(h + " " + d));
 
-       setLastPosition();
+        setLastPosition();
         double latitudeAVG = (p.latitude + lastPosition.getCoordinates().latitude)/2;
         double longitudeAVG =   (p.longitude + lastPosition.getCoordinates().longitude)/2;
 
@@ -251,10 +251,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             lastPosition=new Place(new LatLng(locations[locations.length -1].getCoordinates().latitude,locations[locations.length -1].getCoordinates().longitude),locations[locations.length -1].getDate(),locations[locations.length -1].getHour());}
         else {
-          //  mMap.addMarker(new MarkerOptions().position(lastPosition.getCoordinates()).title(deviceNumber).snippet(lastPosition.getHour() + " " + lastPosition.getDate()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));}
+            //  mMap.addMarker(new MarkerOptions().position(lastPosition.getCoordinates()).title(deviceNumber).snippet(lastPosition.getHour() + " " + lastPosition.getDate()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));}
 
 
-    }}
+        }}
     protected void setMarkers() {
         mMap.clear();
 
@@ -271,15 +271,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.animateCamera(cu);
     }
 
-   protected void markTimePeriodOnTimeline(int start, int stop, boolean makeClear){
-       if(!makeClear) {
-           for (int i = start; i < stop; i++) {
-               dateButtons[i].setBackgroundColor(Color.rgb(128, 128, 128));
-           }
-       }else{for (int i = start; i < stop; i++) {
-           dateButtons[i].setBackgroundColor(Color.rgb(255, 204, 102));
-       }}
-   }
+    protected void markTimePeriodOnTimeline(int start, int stop, boolean makeClear){
+        if(!makeClear) {
+            for (int i = start; i < stop; i++) {
+                dateButtons[i].setBackgroundColor(Color.rgb(128, 128, 128));
+            }
+        }else{for (int i = start; i < stop; i++) {
+            dateButtons[i].setBackgroundColor(Color.rgb(255, 204, 102));
+        }}
+    }
     protected void createTimeline(){
 
         timelineSV = (HorizontalScrollView ) findViewById(R.id.timelineSV);
@@ -309,44 +309,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             });
             dateButtons[i].setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    //wyczysc wszystko
-                    markTimePeriodOnTimeline(0,dateButtons.length,false);
+                                                      @Override
+                                                      public boolean onLongClick(View v) {
+                                                          //wyczysc wszystko
+                                                          markTimePeriodOnTimeline(0,dateButtons.length,false);
 
-                    if(timePeriodIndex[0]==-1 && timePeriodIndex[1]==-1){
-                        timePeriodIndex[0]=z;}
-                    else if(timePeriodIndex[0]!= -1 && timePeriodIndex[1]== -1) {
-                        if (timePeriodIndex[0] > z) {
-                            timePeriodIndex[1] = timePeriodIndex[0];
-                            timePeriodIndex[0] = z;
+                                                          if(timePeriodIndex[0]==-1 && timePeriodIndex[1]==-1){
+                                                              timePeriodIndex[0]=z;}
+                                                          else if(timePeriodIndex[0]!= -1 && timePeriodIndex[1]== -1) {
+                                                              if (timePeriodIndex[0] > z) {
+                                                                  timePeriodIndex[1] = timePeriodIndex[0];
+                                                                  timePeriodIndex[0] = z;
 
-                            //ustaw
-                            markTimePeriodOnTimeline(timePeriodIndex[0],timePeriodIndex[1] + 1,true);
+                                                                  //ustaw
+                                                                  markTimePeriodOnTimeline(timePeriodIndex[0],timePeriodIndex[1] + 1,true);
 
-                        } else {
-                            timePeriodIndex[1] = z;
-                            //ustaw
-                            markTimePeriodOnTimeline(timePeriodIndex[0],timePeriodIndex[1] + 1,true);
+                                                              } else {
+                                                                  timePeriodIndex[1] = z;
+                                                                  //ustaw
+                                                                  markTimePeriodOnTimeline(timePeriodIndex[0],timePeriodIndex[1] + 1,true);
 
-                        }
-                        setMarkers();
+                                                              }
+                                                              setMarkers();
 
-                    }
-                    else if (timePeriodIndex[0] != -1 && timePeriodIndex[1] != -1) {
-                       //mMap.clear();
-                        //wyczysc
-                        markTimePeriodOnTimeline(timePeriodIndex[0],timePeriodIndex[1] + 1,false);
+                                                          }
+                                                          else if (timePeriodIndex[0] != -1 && timePeriodIndex[1] != -1) {
+                                                              //mMap.clear();
+                                                              //wyczysc
+                                                              markTimePeriodOnTimeline(timePeriodIndex[0],timePeriodIndex[1] + 1,false);
 
-                        timePeriodIndex[0]=z;
-                        timePeriodIndex[1]=-1;
-                        dateButtons[z].setBackgroundColor(Color.rgb(255, 204, 102));
-                    }
-                    return true;
-                    }
+                                                              timePeriodIndex[0]=z;
+                                                              timePeriodIndex[1]=-1;
+                                                              dateButtons[z].setBackgroundColor(Color.rgb(255, 204, 102));
+                                                          }
+                                                          return true;
+                                                      }
 
 
-                }
+                                                  }
             );
 
         }
@@ -357,6 +357,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         dateButtons[selectedIndex].setBackgroundColor(Color.rgb(0, 0, 0));        //timelineSV.scrollTo(0, timelineSV.getPaddingEnd());
     }
-    }
+}
 
 

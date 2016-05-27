@@ -3,6 +3,7 @@ package activities;
 import database.DBHandler;
 import database.Request;
 import adapters.CustomRequestAdapter;
+import sms.SMSSender;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import com.locateandgetlocated.locategetlocated.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DeviceHistoryActivity extends AppCompatActivity {
     private CustomRequestAdapter customRequestAdapter;
@@ -48,7 +50,7 @@ public class DeviceHistoryActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                        intent.putExtra("name", deviceNumber);
+                        intent.putExtra("deviceNumber", deviceNumber);
                         intent.putExtra("deviceName", deviceName);
                         intent.putExtra("id", requestArrayList.get(i).id);
                         startActivity(intent);
@@ -61,8 +63,18 @@ public class DeviceHistoryActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+
+                SMSSender smsSender = new SMSSender();
+                Date d = new Date();
+                Request request = new Request(d, deviceNumber);
+                dbHandler.addRequest(request);
+                smsSender.sendRequest(request, "#h#"+ d.getTime());
+                Snackbar.make(view, "Wyslano zapytanie o lokalizacje", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                requestArrayList.clear();
+                requestArrayList.addAll(dbHandler.getRequestsArrayList());
+                customRequestAdapter.notifyDataSetChanged();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
