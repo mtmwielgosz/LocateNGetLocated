@@ -47,7 +47,7 @@ public class AboutActivity extends AppCompatActivity
             public void onClick(View view) {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Zapraszam do pobrania " + R.string.app_name);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Zapraszam do pobrania " + getResources().getString(R.string.app_name));
                 sendIntent.setType("text/plain");
                 startActivity(sendIntent);
             }
