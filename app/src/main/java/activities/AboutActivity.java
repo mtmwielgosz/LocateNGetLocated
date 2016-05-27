@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.locateandgetlocated.locategetlocated.R;
 
@@ -38,6 +40,18 @@ public class AboutActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Button buttonShare = (Button) findViewById(R.id.buttonShare);
+        buttonShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Zapraszam do pobrania " + R.string.app_name);
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+            }
+        });
     }
 
     @Override
