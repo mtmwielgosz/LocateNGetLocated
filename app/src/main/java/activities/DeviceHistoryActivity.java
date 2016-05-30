@@ -39,7 +39,14 @@ public class DeviceHistoryActivity extends AppCompatActivity {
         dbHandler = new DBHandler(this, null, null, 1);
 
 
-        final ArrayList<Request> requestArrayList = dbHandler.getRequestsArrayList();
+        ArrayList<Request> allRequestArrayList = dbHandler.getRequestsArrayList();
+        final ArrayList<Request> requestArrayList = new ArrayList<Request>();
+
+        for(Request req : allRequestArrayList)
+        {
+            if(req.receiver.equals(deviceNumber))
+                requestArrayList.add(req);
+        }
 
         devicesListView = (ListView) findViewById(R.id.listView2);
         customRequestAdapter = new CustomRequestAdapter(getApplicationContext(), requestArrayList);

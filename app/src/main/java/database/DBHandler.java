@@ -165,7 +165,8 @@ public class DBHandler extends SQLiteOpenHelper {
                     new Date(cursor.getLong(cursor.getColumnIndex(REQUEST_LOCALIZATION_DATE))),
                     cursor.getString(cursor.getColumnIndex(REQUEST_RECEIVER))
             );
-            tmp.add(request);
+            if(request.longitude != 0)
+                tmp.add(request);
             cursor.moveToNext();
         }
         return tmp;
