@@ -180,31 +180,67 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(p).title(deviceName).snippet(h + " " + d));
 
-        setLastPosition();
-        double latitudeAVG = (p.latitude + lastPosition.getCoordinates().latitude)/2;
-        double longitudeAVG =   (p.longitude + lastPosition.getCoordinates().longitude)/2;
 
-        //int distance =   (int) calculateDistance(p,locations[locations.length-1].getCoordinates())/1000;
+//        double latitudeAVG = (p.latitude + lastPosition.getCoordinates().latitude)/2;
+      //  double longitudeAVG =   (p.longitude + lastPosition.getCoordinates().longitude)/2;
 
 
-        cameraPosition = new CameraPosition.Builder()
+
+
+       /* cameraPosition = new CameraPosition.Builder()
                 .target(new LatLng(latitudeAVG, longitudeAVG))// Sets the center of the map to Mountain View
-                .zoom(8)                   // Sets the zoom
+                .zoom(4)                   // Sets the zoom
                 .build();                   // Creates a CameraPosition from the builder
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
 
-        int distance = 0;
+        LatLngBounds.Builder b = new LatLngBounds.Builder();
+        if(lastPosition==null){
+            lastPosition=new Place(new LatLng(locations[locations.length -1].getCoordinates().latitude,locations[locations.length -1].getCoordinates().longitude),locations[locations.length -1].getDate(),locations[locations.length -1].getHour());}
+
+
+        b.include(lastPosition.getCoordinates());
+        b.include(p);
+        setLastPosition( p,d, h);
+        int distance =   (int) calculateDistance(p,lastPosition.getCoordinates())/1000;
+        final LatLng x = p;
+        LatLngBounds bounds = b.build();
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 160);
+        //mMap.animateCamera(cu);
+
+            mMap.animateCamera(cu, new GoogleMap.CancelableCallback() {
+                public void onCancel() {
+                }
+
+                public void onFinish() {
+                    cameraPosition = new CameraPosition.Builder()
+                            .target(new LatLng(x.latitude, x.longitude))// Sets the center of the map to Mountain View
+                            .zoom(14)                   // Sets the zoom
+                            .build();                   // Creates a CameraPosition from the builder
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                }
+            });
+
+
+
+       /* cameraPosition = new CameraPosition.Builder()
+                .target(new LatLng(p.latitude, p.longitude))// Sets the center of the map to Mountain View
+                .zoom(12)                   // Sets the zoom
+                .build();                   // Creates a CameraPosition from the builder
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
+
+        distance = 0;
         LatLng currentPosition = getCurrentPosition();
         if( currentPosition!=null){
             distance = (int) calculateDistance(p, currentPosition);
-        }
-        if(distance<1000) {
-            distanceTB.setText( distance + " m");
-        }else{
-            distanceTB.setText(distance / 1000 + " km");
+            if(distance<1000) {
+                distanceTB.setText( distance + " m");
+            }else{
+                distanceTB.setText(distance / 1000 + " km");}
+        }else{distanceTB.setText( " ");}
+
         }
 
-    }
+
     public void setOnSatelite(View view)
     {
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -234,7 +270,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     public void setPlaces(){
         dbHandler = new DBHandler(this, null, null, 1);
-        //dbHandler.addRequest(new Request(10,53.1,17.3,null,null,null,"k"));
+        //dbHandler.addRequest(new
+        // (10,53.1,17.3,null,null,null,"k"));
         int reqestId = getIntent().getIntExtra("id", 1);
 
         Request[] requests = dbHandler.getRequestsArray();
@@ -261,13 +298,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    protected void setLastPosition(){
+    protected void setLastPosition(LatLng l,String d, String h){
         if(lastPosition==null){
 
             lastPosition=new Place(new LatLng(locations[locations.length -1].getCoordinates().latitude,locations[locations.length -1].getCoordinates().longitude),locations[locations.length -1].getDate(),locations[locations.length -1].getHour());}
         else {
-          //  mMap.addMarker(new MarkerOptions().position(lastPosition.getCoordinates()).title(deviceNumber).snippet(lastPosition.getHour() + " " + lastPosition.getDate()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));}
-    }}
+
+            mMap.addMarker(new MarkerOptions().position(lastPosition.getCoordinates()).title(deviceName).snippet(lastPosition.getHour() + " " + lastPosition.getDate()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+            lastPosition = new Place(new LatLng(l.latitude, l.longitude),d,h);
+        }
+}
 
     protected void setMarkers() {
         mMap.clear();
@@ -278,13 +318,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             adressTB.setText("Wybrane lokalizacje");
 
         LatLngBounds.Builder b = new LatLngBounds.Builder();
-        double distance = calculateDistance(locations[timePeriodIndex[0]].getCoordinates(), locations[1].getCoordinates());
+        //double distance = calculateDistance(locations[timePeriodIndex[0]].getCoordinates(), locations[1].getCoordinates());
         for (int i = timePeriodIndex[0]; i < timePeriodIndex[1] + 1; i++) {
             b.include(locations[i].getCoordinates());
-            mMap.addMarker(new MarkerOptions().position(locations[i].getCoordinates()).title(locations[i].getHour()).snippet(locations[i].getDate()).icon(BitmapDescriptorFactory.fromResource(R.drawable.dot)));
+           // mMap.addMarker(new MarkerOptions().position(locations[i].getCoordinates()).title(locations[i].getHour()).snippet(locations[i].getDate()).icon(BitmapDescriptorFactory.fromResource(R.drawable.dot)));
+            mMap.addMarker(new MarkerOptions().position(locations[i].getCoordinates()).title(locations[i].getHour()).snippet(locations[i].getDate()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         }
         LatLngBounds bounds = b.build();
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 4);
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 160);
         mMap.animateCamera(cu);
     }
 
