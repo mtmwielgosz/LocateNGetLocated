@@ -80,7 +80,14 @@ public class DeviceHistoryActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
 
                 requestArrayList.clear();
-                requestArrayList.addAll(dbHandler.getRequestsArrayList());
+                ArrayList<Request> allRequestArrayList = dbHandler.getRequestsArrayList();
+                for(Request req : allRequestArrayList)
+                {
+                    if(req.receiver.equals(deviceNumber))
+                        requestArrayList.add(req);
+                }
+
+                requestArrayList.addAll(allRequestArrayList);
                 customRequestAdapter.notifyDataSetChanged();
             }
         });

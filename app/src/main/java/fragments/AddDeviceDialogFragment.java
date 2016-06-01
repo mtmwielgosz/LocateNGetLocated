@@ -16,6 +16,8 @@ import database.*;
 
 import com.locateandgetlocated.locategetlocated.R;
 
+import java.util.ArrayList;
+
 import activities.DevicesActivity;
 
 /**
@@ -54,6 +56,8 @@ public class AddDeviceDialogFragment extends DialogFragment {
                         }
                         adapterSingleton.notifyCustomAdapters();
                         // TODO odświeżanie widoku
+
+
                     }
                 })
                 .setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {

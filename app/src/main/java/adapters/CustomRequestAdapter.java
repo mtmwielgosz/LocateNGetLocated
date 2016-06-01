@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.locateandgetlocated.locategetlocated.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import database.DBHandler;
 import database.Device;
@@ -59,19 +60,30 @@ public class CustomRequestAdapter extends BaseAdapter {
 
         Request request = requestsList.get(position);
 
-
         requestViewHolder.latitude = detail(view, R.id.latitudeTextView, request.latitude);
         requestViewHolder.longitude = detail(view, R.id.longitudeTextView, request.longitude);
-        requestViewHolder.deviceName = detail(view, R.id.deviceName, request.receiver);
+        requestViewHolder.deviceName = detail(view, R.id.deviceName, request.receiver, true);
+        requestViewHolder.date = detail(view, R.id.time, request.localizationDate.getHours()+ ":" +request.localizationDate.getMinutes(), false);
+        requestViewHolder.time = detail(view, R.id.date, new java.sql.Date(request.localizationDate.getTime())+"", false);
         return view;
+
     }
 
 
-    private TextView detail(View view, int resId, String phoneNumber){
-        dbHandler = new DBHandler(context, null, null, 1);
-        Device device = dbHandler.getDeviceByDeviceNumber(phoneNumber);
+    private TextView detail(View view, int resId, String val, boolean isNumber){
+
         TextView textView = (TextView) view.findViewById(resId);
-        textView.setText(device.deviceName);
+        if(isNumber)
+        {
+            dbHandler = new DBHandler(context, null, null, 1);
+            Device device = dbHandler.getDeviceByDeviceNumber(val);
+            textView.setText(device.deviceName);
+        }
+        else
+        {
+            textView.setText(val);
+        }
+
         return textView;
     }
 
@@ -81,7 +93,8 @@ public class CustomRequestAdapter extends BaseAdapter {
         return textView;
     }
 
+
     private class RequestViewHolder {
-        TextView deviceName, latitude, longitude;
+        TextView deviceName, latitude, longitude, time, date;
     }
 }

@@ -55,7 +55,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Spinner mapViewSpinner;
     private LocationManager locationManager;
     private Place lastPosition;
-    private int current_indeks=22;
     private Geocoder geoCoder=null;
     private TextView dataTB;
     private TextView distanceTB;
@@ -204,21 +203,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         int distance =   (int) calculateDistance(p,lastPosition.getCoordinates())/1000;
         final LatLng x = p;
         LatLngBounds bounds = b.build();
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 160);
+        final CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 160);
         //mMap.animateCamera(cu);
 
-            mMap.animateCamera(cu, new GoogleMap.CancelableCallback() {
-                public void onCancel() {
-                }
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback(){
+            @Override
+            public void onMapLoaded() {
+                mMap.animateCamera(cu, new GoogleMap.CancelableCallback() {
+                    public void onCancel() {
+                    }
 
-                public void onFinish() {
-                    cameraPosition = new CameraPosition.Builder()
-                            .target(new LatLng(x.latitude, x.longitude))// Sets the center of the map to Mountain View
-                            .zoom(14)                   // Sets the zoom
-                            .build();                   // Creates a CameraPosition from the builder
-                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                }
-            });
+                    public void onFinish() {
+                        cameraPosition = new CameraPosition.Builder()
+                                .target(new LatLng(x.latitude, x.longitude))// Sets the center of the map to Mountain View
+                                .zoom(14)                   // Sets the zoom
+                                .build();                   // Creates a CameraPosition from the builder
+                        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                    }
+                });
+            }
+        });
+
+
 
 
 

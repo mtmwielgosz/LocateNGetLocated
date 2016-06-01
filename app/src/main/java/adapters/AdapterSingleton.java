@@ -14,7 +14,7 @@ import database.Request;
 public class AdapterSingleton {
     private static AdapterSingleton mInstance = null;
     DBHandler dbHandler;
-    BaseAdapter[] adapters = new BaseAdapter[3];
+    BaseAdapter[] adapters = new BaseAdapter[2];
     ArrayList<Device> localizedDevices;
     ArrayList<Device> locatingDevices;
     ArrayList<Request> userRequests;
@@ -37,9 +37,9 @@ public class AdapterSingleton {
         adapters[1] = devicesAdapter;
     }
 
-    public void setUserRequestAdapter(CustomRequestAdapter requestAdapter){
-        adapters[2] = requestAdapter;
-    }
+//    public void setUserRequestAdapter(CustomRequestAdapter requestAdapter){
+//        adapters[2] = requestAdapter;
+//    }
 
     public void setLocalizedDevices(ArrayList<Device> localizedDevices) {
         this.localizedDevices = localizedDevices;
@@ -64,8 +64,8 @@ public class AdapterSingleton {
         locatingDevices.clear();
         locatingDevices.addAll(dbHandler.getDevicesArrayListByType(2));
 
-        userRequests.clear();
-        userRequests.addAll(dbHandler.getRequestsArrayList());
+//        userRequests.clear();
+//        userRequests.addAll(dbHandler.getRequestsArrayList());
 
 
         for (int i = 0; i < adapters.length; i++) {
