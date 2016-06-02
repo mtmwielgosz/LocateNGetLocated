@@ -6,9 +6,15 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.widget.Toast;
 
+import com.locateandgetlocated.locategetlocated.R;
+
 import java.net.ContentHandler;
+
+import activities.AboutActivity;
 
 /**
  * Created by kamil on 2016-05-27.
@@ -20,29 +26,23 @@ public class Notifier {
         this.context = context;
     }
 
-    public void makeNotification(String title, String message) {
-        Toast.makeText(context, "1", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent();
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        Toast.makeText(context, "2", Toast.LENGTH_LONG).show();
+    public void showNotification(String title, String message) {
 
-        Notification notification = new Notification.Builder(context)
-                .setTicker("cos")
-                .setContentTitle(title)
-                .setContentText(message)
-//                .setSmallIcon(android.support.design.R.drawable.ic_)
-                .setContentIntent(pendingIntent).getNotification();
-        Toast.makeText(context, "3", Toast.LENGTH_LONG).show();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        builder.setSmallIcon(R.drawable.logo);
+        builder.setContentTitle(title);
+        builder.setContentText(message);
 
-        notification.flags = Notification.FLAG_AUTO_CANCEL;
-        Toast.makeText(context, "4", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(context, AboutActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(AboutActivity.class);
+        stackBuilder.addNextIntent(intent);
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Toast.makeText(context, "5", Toast.LENGTH_LONG).show();
+        notificationManager.notify(0,builder.build());
 
-
-        notificationManager.notify(0, notification);
-        Toast.makeText(context, "6", Toast.LENGTH_LONG).show();
 
     }
 }
