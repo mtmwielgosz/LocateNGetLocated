@@ -115,9 +115,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mGSM = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
     final LatLng l =d;
         Boolean present=geoCoder.isPresent();
-        if (mWifi.isConnected()) {
+        if (mWifi.isConnected() || mGSM.isConnected()) {
             if(present!=null && present){
             adressMediumTB.post(new Runnable() {
                 @Override
@@ -299,9 +301,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         locations = new Place[places.size()];
-        for(int i = 0; i < places.size(); i++)
+        for(int i =  places.size() -1; i >=0; i--)
         {
-            locations[i] = places.get(i);
+            locations[places.size() -1 - i] = places.get(i);
         }
     }
 
@@ -444,57 +446,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
- /*class GeoCoding extends Thread  {
-
-    List<Address> locations = null;
-    String adress = "";
-    Geocoder geocoder;
-    String text="-";
-    String textMedium="-";
-    LatLng l;
-
-    public GeoCoding(Geocoder g, LatLng l) {
-       geocoder=g;
-        this.l=l;
-    }
-=======
-}
->>>>>>> origin/master
-
-    @Override
-    public void run() {
-
-          //  try {
-                try
-
-                {
-                    locations = geocoder.getFromLocation(l.latitude, l.longitude, 1);
-                    if (locations.size() > 0) {
-                        for (int i = 1; i < locations.get(0).getMaxAddressLineIndex() + 1; i++) {
-
-                            adress = adress + locations.get(0).getAddressLine(i) + ", ";
-                        }
-                       text=adress;
-                       textMedium=locations.get(0).getAddressLine(0) + "";
-
-
-                    }
-                }
-
-                catch(
-                        IOException e
-                        )
-
-                {
-                    e.printStackTrace();
-                }
-
-            } //catch (InterruptedException e) {
-            //    e.printStackTrace();
-         //   }
-        }
-
-*/
 
 
 
