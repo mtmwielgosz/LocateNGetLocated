@@ -89,9 +89,11 @@ public class SettingsActivity extends AppCompatActivity
         } else if (id == R.id.nav_devices) {
             intent = new Intent(this, DevicesActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_settings) {
-            //do nothing
-        } else if (id == R.id.nav_about) {
+        }
+         /*} else if (id == R.id.nav_settings) {
+            intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);*/
+            else if (id == R.id.nav_about) {
             intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
         }

@@ -22,7 +22,7 @@ public class AboutActivity extends AppCompatActivity
     protected void onStart() { //Zmiana wybranej pozycji w menu głównym
         super.onStart();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.getMenu().getItem(4).setChecked(true);
+        navigationView.getMenu().getItem(3).setChecked(true);
     }
 
     @Override
@@ -96,9 +96,9 @@ public class AboutActivity extends AppCompatActivity
         } else if (id == R.id.nav_devices) {
             intent = new Intent(this, DevicesActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_settings) {
+        /*} else if (id == R.id.nav_settings) {
             intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+            startActivity(intent);*/
         } else if (id == R.id.nav_about) {
             //do nothing
         }

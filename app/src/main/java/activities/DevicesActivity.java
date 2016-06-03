@@ -168,9 +168,9 @@ public class DevicesActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_devices) {
             //do nothing
-        } else if (id == R.id.nav_settings) {
+         /*} else if (id == R.id.nav_settings) {
             intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+            startActivity(intent);*/
         } else if (id == R.id.nav_about) {
             intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
