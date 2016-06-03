@@ -63,9 +63,16 @@ public class CustomRequestAdapter extends BaseAdapter {
         requestViewHolder.latitude = detail(view, R.id.latitudeTextView, request.latitude);
         requestViewHolder.longitude = detail(view, R.id.longitudeTextView, request.longitude);
         requestViewHolder.deviceName = detail(view, R.id.deviceName, request.receiver, true);
-        requestViewHolder.date = detail(view, R.id.time, request.localizationDate.getHours()+ ":" +request.localizationDate.getMinutes(), false);
+        requestViewHolder.date = detail(view, R.id.time, request.localizationDate.getHours()+ ":" + correctMinutes(request.localizationDate.getMinutes()), false);
         requestViewHolder.time = detail(view, R.id.date, new java.sql.Date(request.localizationDate.getTime())+"", false);
         return view;
+    }
+
+    private String correctMinutes(int minutes)
+    {
+        if(minutes < 10)
+            return "0" + minutes;
+        return "" + minutes;
 
     }
 

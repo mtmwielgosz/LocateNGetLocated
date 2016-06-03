@@ -8,8 +8,10 @@ import android.telephony.SmsMessage;
 import android.widget.Toast;
 
 import java.util.Date;
+import java.util.List;
 
 import database.DBHandler;
+import database.Device;
 import database.Request;
 import localization.LocationTracker;
 
@@ -41,6 +43,7 @@ public class SMSReceiver extends BroadcastReceiver {
 
             if (message.startsWith(CLIENT_PREFIX)) {
                 handleLocalization(message);
+
             }
         }
     }
@@ -58,7 +61,12 @@ public class SMSReceiver extends BroadcastReceiver {
 
         dbHandler = new DBHandler(context, null, null, 1);
         dbHandler.updateRequest(responseRequest);
+        List<Request> requests = dbHandler.getRequestsArrayList();
+        responseRequest = requests.get(0);
+        Device device = dbHandler.getDeviceByDeviceNumber(responseRequest.receiver);
 
+        Notifier notifier = new Notifier(context, device, responseRequest);
+        notifier.showNotification("Locate & Get Located", "Zlokalizowano urządzenie " + device.deviceName + " " + device.phoneNumber + " id: " + responseRequest.id);
 
         Toast.makeText(context, "handle localization", Toast.LENGTH_LONG).show();
     }

@@ -96,7 +96,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         geoCoder = new Geocoder(this);
         deviceNumber = getIntent().getStringExtra("deviceNumber");
-
         deviceName = getIntent().getStringExtra("deviceName");
         counter = (TextView) findViewById(R.id.counter);
         dataTB = (TextView) findViewById(R.id.dataTB);
@@ -289,7 +288,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (requests[i].receiver.equals(deviceNumber) && !(new java.sql.Date(requests[i].localizationDate.getTime())+"").equals("1970-01-01")) {
                 Log.d("WCHODZ", requests[i].receiver + "==" + deviceNumber);
 
-                places.add(new Place(new LatLng(requests[i].latitude, requests[i].longitude),new java.sql.Date(requests[i].localizationDate.getTime())+"", requests[i].localizationDate.getHours()+ ":" +requests[i].localizationDate.getMinutes() ));
+                places.add(new Place(new LatLng(requests[i].latitude, requests[i].longitude),
+                        new java.sql.Date(requests[i].localizationDate.getTime())+"", requests[i].localizationDate.getHours()+
+                        ":" + correctMinutes(requests[i].localizationDate.getMinutes()) ));
 
                 if(reqestId==requests[i].id){
                     selectedIndex = places.size()-1;
@@ -302,6 +303,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         {
             locations[i] = places.get(i);
         }
+    }
+
+    private String correctMinutes(int minutes)
+    {
+        if(minutes < 10)
+            return "0" + minutes;
+        return "" + minutes;
+
     }
 
     protected void setLastPosition(LatLng l,String d, String h){

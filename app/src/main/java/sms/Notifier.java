@@ -14,16 +14,23 @@ import com.locateandgetlocated.locategetlocated.R;
 
 import java.net.ContentHandler;
 
-import activities.AboutActivity;
+import activities.HistoryActivity;
+import activities.MapsActivity;
+import database.Device;
+import database.Request;
 
 /**
  * Created by kamil on 2016-05-27.
  */
 public class Notifier {
     private Context context;
+    private Device device;
+    private Request request;
 
-    public Notifier(Context context) {
+    public Notifier(Context context, Device device, Request request) {
         this.context = context;
+        this.device = device;
+        this.request = request;
     }
 
     public void showNotification(String title, String message) {
@@ -33,9 +40,12 @@ public class Notifier {
         builder.setContentTitle(title);
         builder.setContentText(message);
 
-        Intent intent = new Intent(context, AboutActivity.class);
+        Intent intent = new Intent(context, MapsActivity.class);
+        intent.putExtra("deviceNumber", device.phoneNumber);
+        intent.putExtra("deviceName", device.deviceName);
+        intent.putExtra("id", request.id);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(AboutActivity.class);
+        stackBuilder.addParentStack(HistoryActivity.class);
         stackBuilder.addNextIntent(intent);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
