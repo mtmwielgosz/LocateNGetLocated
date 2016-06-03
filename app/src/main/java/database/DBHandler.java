@@ -148,7 +148,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public ArrayList<Request> getRequestsArrayList() {
         ArrayList<Request> tmp = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_NAME_REQUESTS + " WHERE 1";
+        String query = "SELECT * FROM " + TABLE_NAME_REQUESTS + " WHERE 1 ORDER BY " + REQUEST_LOCALIZATION_DATE + " DESC";
 
         Log.d("SELEEECT", query);
 
