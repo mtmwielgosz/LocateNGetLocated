@@ -44,6 +44,7 @@ public class Notifier {
         intent.putExtra("deviceNumber", device.phoneNumber);
         intent.putExtra("deviceName", device.deviceName);
         intent.putExtra("id", request.id);
+        intent.putExtra("fromNotify", true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(HistoryActivity.class);
         stackBuilder.addNextIntent(intent);

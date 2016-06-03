@@ -2,6 +2,7 @@ package activities;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -442,7 +443,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         adressMediumTB.setText(s2);
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        if(getIntent().getBooleanExtra("fromNotify", false))
+        {
+            startActivity(new Intent(getApplicationContext(), LocalizationActivity.class));
+        }
+        else
+            super.onBackPressed();
     }
+
+}
 
  /*class GeoCoding extends Thread  {
 
