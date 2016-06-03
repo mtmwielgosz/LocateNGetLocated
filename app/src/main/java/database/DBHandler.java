@@ -303,6 +303,32 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
+
+    public ArrayList<Device> getDevicesWithRequestsArrayList() {
+        ArrayList<Device> tmp = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME_DEVICES + " WHERE " + DEVICE_NUMBER + " IN " +
+                "( SELECT " + REQUEST_RECEIVER + " FROM " + TABLE_NAME_REQUESTS + " WHERE " + LONGITUDE + " IS NOT NULL )";
+
+
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Device device = new Device(
+                    cursor.getInt(cursor.getColumnIndex(DEVICE_ID)),
+                    cursor.getString(cursor.getColumnIndex(DEVICE_NUMBER)),
+                    cursor.getString(cursor.getColumnIndex(DEVICE_NAME)),
+                    cursor.getInt(cursor.getColumnIndex(DEVICE_TYPE))
+            );
+
+            tmp.add(device);
+            cursor.moveToNext();
+        }
+        return tmp;
+    }
+
+
     public Device[] getDevicesArrayByType(int type) {
         Device[] tmp = new Device[getDevicesArrayListByType(type).size()];
 

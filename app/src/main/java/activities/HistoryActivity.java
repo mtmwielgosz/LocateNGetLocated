@@ -55,7 +55,7 @@ public class HistoryActivity extends AppCompatActivity
         devicesListView = (ListView) findViewById(R.id.listView);
         dbHandler = new DBHandler(this, null, null, 1);
 
-        deviceArrayList = dbHandler.getAllDevicesArrayList();
+        deviceArrayList = dbHandler.getDevicesWithRequestsArrayList();
 
         customDeviceAdapter = new CustomDeviceAdapter(getApplicationContext(), deviceArrayList);
 
