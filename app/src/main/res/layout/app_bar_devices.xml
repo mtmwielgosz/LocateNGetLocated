@@ -44,12 +44,4 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_add" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|center"
-        android:layout_margin="@dimen/fab_margin"
-        android:background="@drawable/abc_ic_menu_copy_mtrl_am_alpha" />
-
 </android.support.design.widget.CoordinatorLayout>

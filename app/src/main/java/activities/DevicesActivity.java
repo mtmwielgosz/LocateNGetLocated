@@ -82,20 +82,6 @@ public class DevicesActivity extends AppCompatActivity
             }
         });
 
-        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
-        fab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Wyświetlenie fragmentu do dodawania urządzeń
-                int type = viewPager.getCurrentItem();
-                Intent contactsIntent = new Intent(getApplicationContext(), ContactsActivity.class);
-                contactsIntent.putExtra("type", type);
-                startActivity(contactsIntent);
-            }
-        });
-
-
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -150,6 +136,12 @@ public class DevicesActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.search) {
             return true;
+        }
+        else if(id == R.id.copyDevices) {
+            int type = viewPager.getCurrentItem();
+            Intent contactsIntent = new Intent(getApplicationContext(), ContactsActivity.class);
+            contactsIntent.putExtra("type", type);
+            startActivity(contactsIntent);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -7,4 +7,11 @@
         android:title="Szukaj"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="collapseActionView|ifRoom"/>
+
+    <item
+        android:id="@+id/copyDevices"
+        android:title="Kopiuj z kontaktów"
+        android:icon="@drawable/abc_ic_menu_copy_mtrl_am_alpha"
+        app:showAsAction="collapseActionView|always"
+        />
 </menu>
