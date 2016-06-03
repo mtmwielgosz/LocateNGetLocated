@@ -306,6 +306,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         {
             locations[places.size() -1 - i] = places.get(i);
         }
+        selectedIndex = places.size() -1 - selectedIndex;
     }
 
     private String correctMinutes(int minutes)
