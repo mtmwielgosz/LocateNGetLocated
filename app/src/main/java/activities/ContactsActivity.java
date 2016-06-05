@@ -112,7 +112,7 @@ public class ContactsActivity extends AppCompatActivity {
                 if (phones != null) {
                     Log.e("count", "" + phones.getCount());
                     if (phones.getCount() == 0) {
-                        Toast.makeText(getApplicationContext(), "No contacts in your contact list.", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getApplicationContext(), "No contacts in your contact list.", Toast.LENGTH_LONG).show();
                     }
 
                     while (phones.moveToNext()) {
