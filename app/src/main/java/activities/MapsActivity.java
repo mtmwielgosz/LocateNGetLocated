@@ -113,7 +113,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
     public void setAdress(LatLng d){
 
-
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         NetworkInfo mGSM = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
@@ -133,7 +132,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             for (int i = 1; i < locations.get(0).getMaxAddressLineIndex() + 1; i++) {
                                 adress = adress + locations.get(0).getAddressLine(i) + ", ";
                             }
+
                             setAdressTextbox(adress,locations.get(0).getAddressLine(0) + "");
+                        }else{                            setAdressTextbox("","Brak adresu");
                         }
                     }
                     catch(IOException e) {
