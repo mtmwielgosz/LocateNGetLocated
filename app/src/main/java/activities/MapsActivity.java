@@ -3,7 +3,6 @@ package activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -11,27 +10,18 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,13 +35,12 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.locateandgetlocated.locategetlocated.R;
 
-import database.DBHandler;
-import database.Request;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import database.DBHandler;
+import database.Request;
 import extra.SpinnerActivity;
 import localization.Place;
 
@@ -190,7 +179,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         toolbar.setTitle(deviceName);
         //counter.setText((selectedIndex + 1) + "/" + locations.length);
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(p).title(deviceName).snippet(h + " " + d).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+        mMap.addMarker(new MarkerOptions().position(p).title(deviceName).snippet(h + " " + d).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
 
 //        double latitudeAVG = (p.latitude + lastPosition.getCoordinates().latitude)/2;
@@ -362,10 +351,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void markTimePeriodOnTimeline(int start, int stop, boolean makeClear){
         if(!makeClear) {
             for (int i = start; i < stop; i++) {
-                dateButtons[i].setBackgroundColor(Color.parseColor("#FF5722"));
+                dateButtons[i].setBackgroundColor(Color.rgb(128, 128, 128));
             }
         }else{for (int i = start; i < stop; i++) {
-            dateButtons[i].setBackgroundColor(Color.parseColor("#FF5722"));
+            dateButtons[i].setBackgroundColor(Color.rgb(255, 204, 102));
         }}
     }
     protected void createTimeline(){
@@ -382,7 +371,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             dateButtons[i].setText(locations[i].getHour() + "\n" + locations[i].getDate());
             dateButtons[i].setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
             dateButtons[i].setTextColor(Color.rgb(255, 255, 255));
-            //dateButtons[i].setBackgroundColor(Color.rgb(128, 128, 128));
+            dateButtons[i].setBackgroundColor(Color.rgb(128, 128, 128));
             //dateButtons[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             timelineLayout.addView(dateButtons[i]);
             dateButtons[i].setOnClickListener(new View.OnClickListener() {
@@ -409,7 +398,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                           markTimePeriodOnTimeline(0,dateButtons.length,false);
 
                                                           if(timePeriodIndex[0]==-1 && timePeriodIndex[1]==-1){
-                                                              timePeriodIndex[0]=z;}
+                                                              timePeriodIndex[0]=z;
+                                                              dateButtons[z].setBackgroundColor(Color.rgb(255, 204, 102));
+
+                                                          }
                                                           else if(timePeriodIndex[0]!= -1 && timePeriodIndex[1]== -1) {
                                                               if (timePeriodIndex[0] > z) {
                                                                   timePeriodIndex[1] = timePeriodIndex[0];
@@ -435,7 +427,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                                               timePeriodIndex[0]=z;
                                                               timePeriodIndex[1]=-1;
                                                               //getApplicationContext().getTheme().resolveAttribute(R.attr.colorAccent, value, true);
-                                                              dateButtons[z].setBackgroundColor(Color.parseColor("#FF5722"));
+                                                              dateButtons[z].setBackgroundColor(Color.rgb(255, 204, 102));
                                                           }
                                                           return true;
                                                       }
