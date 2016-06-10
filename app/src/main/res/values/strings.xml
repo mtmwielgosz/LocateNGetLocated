@@ -14,9 +14,9 @@
     <string name="title_activity_settings">Ustawienia</string>
     <string name="title_activity_about">O aplikacji</string>
     <string-array name="mapViewsArray">
-        <item>Normalny</item>
-        <item>Teren</item>
-        <item>Satelita</item>
+        <item>NORMALNY</item>
+        <item>TEREN</item>
+        <item>SATELITA</item>
     </string-array>
 
 </resources>

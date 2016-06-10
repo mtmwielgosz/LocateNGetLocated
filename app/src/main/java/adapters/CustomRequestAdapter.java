@@ -1,6 +1,9 @@
 package adapters;
 
 import android.content.Context;
+import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +27,21 @@ public class CustomRequestAdapter extends BaseAdapter {
     LayoutInflater layoutInflater;
     Context context;
     DBHandler dbHandler;
+    private boolean connected;
+    Geocoder geoCoder;
+    Boolean present;
 
     public CustomRequestAdapter(Context context, ArrayList<Request> requestsList) {
         this.context = context;
         this.requestsList = requestsList;
         layoutInflater = LayoutInflater.from(this.context);
+        ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mGSM = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (mWifi.isConnected() || mGSM.isConnected()) connected = true;
+        else connected = false;
+        geoCoder = new Geocoder(context);
+        present = geoCoder.isPresent();
     }
 
 
@@ -59,7 +72,6 @@ public class CustomRequestAdapter extends BaseAdapter {
         }
 
         Request request = requestsList.get(position);
-
         requestViewHolder.latitude = detail(view, R.id.latitudeTextView, request.latitude);
         requestViewHolder.longitude = detail(view, R.id.longitudeTextView, request.longitude);
         requestViewHolder.deviceName = detail(view, R.id.deviceName, request.receiver, true);

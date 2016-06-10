@@ -3,6 +3,7 @@ package activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -12,9 +13,18 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
@@ -32,34 +42,29 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.locateandgetlocated.locategetlocated.R;
-
-import org.w3c.dom.Text;
 
 import database.DBHandler;
 import database.Request;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import extra.SpinnerActivity;
 import localization.Place;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private Toolbar toolbar;
     private String deviceNumber;
     private String deviceName;
-    private Spinner mapViewSpinner;
     private LocationManager locationManager;
     private Place lastPosition;
     private Geocoder geoCoder=null;
-    private TextView dataTB;
-    private TextView distanceTB;
     private TextView counter;
+    private Spinner spinner;
     static private TextView adressTB;
     static private TextView adressMediumTB;
     private CameraPosition cameraPosition;
@@ -73,12 +78,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private int selectedIndex;
     private DBHandler dbHandler;
 
-
+    TypedValue value;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        value = new TypedValue();
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setTitle(getIntent().getStringExtra("deviceName"));
+
+        spinner = (Spinner) findViewById(R.id.spinner_nav);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -92,23 +107,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         createTimeline();
     }
 
-
     public void initializeInterface(){
 
         geoCoder = new Geocoder(this);
         deviceNumber = getIntent().getStringExtra("deviceNumber");
         deviceName = getIntent().getStringExtra("deviceName");
-        counter = (TextView) findViewById(R.id.counter);
-        dataTB = (TextView) findViewById(R.id.dataTB);
         adressTB = (TextView) findViewById(R.id.adressTB);
         adressMediumTB = (TextView) findViewById(R.id.adressMediumTB);
-        distanceTB = (TextView) findViewById(R.id.distanceTB);
-        mapViewSpinner = (Spinner) findViewById(R.id.mapViewMode);
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.mapViewsArray, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mapViewSpinner.setAdapter(adapter);
-        mapViewSpinner.setOnItemSelectedListener(new SpinnerActivity());
+                R.array.mapViewsArray, R.layout.spinner_item);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new SpinnerActivity());
 
     }
     public void setAdress(LatLng d){
@@ -176,10 +187,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     public void setSelectedPosition(LatLng p, String d, String h){
-        dataTB.setText(deviceName);
-        counter.setText((selectedIndex + 1) + "/" + locations.length);
+        toolbar.setTitle(deviceName);
+        //counter.setText((selectedIndex + 1) + "/" + locations.length);
         mMap.clear();
-        mMap.addMarker(new MarkerOptions().position(p).title(deviceName).snippet(h + " " + d));
+        mMap.addMarker(new MarkerOptions().position(p).title(deviceName).snippet(h + " " + d).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
 
 //        double latitudeAVG = (p.latitude + lastPosition.getCoordinates().latitude)/2;
@@ -236,7 +247,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .build();                   // Creates a CameraPosition from the builder
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
 
-        distance = 0;
+        /*distance = 0;
         LatLng currentPosition = getCurrentPosition();
         if( currentPosition!=null){
             distance = (int) calculateDistance(p, currentPosition);
@@ -245,7 +256,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }else{
                 distanceTB.setText(distance / 1000 + " km");}
         }else{distanceTB.setText( " ");}
-
+         */
         }
 
 
@@ -351,19 +362,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void markTimePeriodOnTimeline(int start, int stop, boolean makeClear){
         if(!makeClear) {
             for (int i = start; i < stop; i++) {
-                dateButtons[i].setBackgroundColor(Color.rgb(128, 128, 128));
+                dateButtons[i].setBackgroundColor(Color.parseColor("#FF5722"));
             }
         }else{for (int i = start; i < stop; i++) {
-            dateButtons[i].setBackgroundColor(Color.rgb(255, 204, 102));
+            dateButtons[i].setBackgroundColor(Color.parseColor("#FF5722"));
         }}
     }
     protected void createTimeline(){
 
         timelineSV = (HorizontalScrollView ) findViewById(R.id.timelineSV);
-        timelineSV.setBackgroundColor(Color.rgb(128, 128, 128));
+        //timelineSV.setBackgroundColor(Color.rgb(128, 128, 128));
         dateButtons=new Button[locations.length];
         timelineLayout = (LinearLayout) findViewById(R.id.timelineLayout);
-        timelineLayout.setBackgroundColor(Color.rgb(128, 128, 128));
+        //timelineLayout.setBackgroundColor(Color.rgb(128, 128, 128));
 
         for(int i=0; i<locations.length; i++){
             final int z =i;
@@ -371,18 +382,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             dateButtons[i].setText(locations[i].getHour() + "\n" + locations[i].getDate());
             dateButtons[i].setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
             dateButtons[i].setTextColor(Color.rgb(255, 255, 255));
-            dateButtons[i].setBackgroundColor(Color.rgb(128, 128, 128));
-            dateButtons[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            //dateButtons[i].setBackgroundColor(Color.rgb(128, 128, 128));
+            //dateButtons[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             timelineLayout.addView(dateButtons[i]);
             dateButtons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    dateButtons[selectedIndex].setBackgroundColor(Color.rgb(128, 128, 128));
+                    //getApplicationContext().getTheme().resolveAttribute(R.attr.colorAccent, value, true);
+                    dateButtons[selectedIndex].setBackgroundColor(Color.parseColor("#FF5722"));
                     //wyczysc
                     markTimePeriodOnTimeline(0,dateButtons.length,false);
                     selectedIndex = z;
-                    dateButtons[z].setBackgroundColor(Color.rgb(0, 0, 0));
+                    //getApplicationContext().getTheme().resolveAttribute(R.attr.colorAccent, value, true);
+                    dateButtons[z].setBackgroundColor(Color.parseColor("#FF5722"));
                     setSelectedPosition(locations[z].getCoordinates(), locations[z].getDate(), locations[z].getHour());
                     setAdress(locations[z].getCoordinates());
 
@@ -421,7 +434,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                                               timePeriodIndex[0]=z;
                                                               timePeriodIndex[1]=-1;
-                                                              dateButtons[z].setBackgroundColor(Color.rgb(255, 204, 102));
+                                                              //getApplicationContext().getTheme().resolveAttribute(R.attr.colorAccent, value, true);
+                                                              dateButtons[z].setBackgroundColor(Color.parseColor("#FF5722"));
                                                           }
                                                           return true;
                                                       }
@@ -437,7 +451,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         if(locations.length>0) {
-            dateButtons[selectedIndex].setBackgroundColor(Color.rgb(0, 0, 0));        //timelineSV.scrollTo(0, timelineSV.getPaddingEnd());
+            dateButtons[selectedIndex].setBackgroundColor(Color.parseColor("#FF5722"));        //timelineSV.scrollTo(0, timelineSV.getPaddingEnd());
         }}
 
 

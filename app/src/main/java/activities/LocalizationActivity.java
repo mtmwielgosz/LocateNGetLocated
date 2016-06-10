@@ -1,6 +1,10 @@
 package activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -16,7 +20,9 @@ import android.widget.ListView;
 
 import com.locateandgetlocated.locategetlocated.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import database.DBHandler;
 import database.Device;
@@ -63,7 +69,6 @@ public class LocalizationActivity extends AppCompatActivity
 
 
         //      toShow = dbHandler.getRequestsWithDevicesArray("'%'");
-
 
         devicesListView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
